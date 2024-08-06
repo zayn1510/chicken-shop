@@ -1,0 +1,19 @@
+
+
+#data-jurnal tr td {
+    padding: 5px;
+    border-bottom: 2px solid #CCC;
+}
+table{
+    font-family: font1;
+    width: 100%;
+}
+.border-laporan{
+ background-color: #007BFF;
+ color: white;
+ width: 50%;   
+ border-radius: 10px;
+}
+.border-laporan h4{
+    padding: 10px;
+}
