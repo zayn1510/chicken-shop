@@ -110,29 +110,16 @@
                                         <p class="poppins font-13">Pengguna</p>
                                     </a>
                                 </li>
-
                                 <li class="nav-item">
-                                    <a href="{{ url('kategori') }}" class="nav-link">
+                                    <a href="{{ url('jenis') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Kategori</p>
+                                        <p class="poppins font-13">Jenis</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('satuan') }}" class="nav-link">
+                                    <a href="{{ url('ayam') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Satuan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('suplier') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Suplier</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('product') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Produk</p>
+                                        <p class="poppins font-13">Ayam</p>
                                     </a>
                                 </li>
                             </ul>
@@ -161,7 +148,6 @@
                         </li>
                     </ul>
                     </li>
-
                     <li class="nav-item">
                         <a href="{{ url('admin/dashboard/akun') }}" class="nav-link">
                             <i class="nav-icon fas fa-user"></i>

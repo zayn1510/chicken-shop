@@ -10,9 +10,9 @@ app.controller("homeController", ($scope, $http) => {
     let itemPage = 10;
     let currentPage = 0;
     let totalDataPage = 0;
-    const detailUserElement = document.getElementById("detail-user");
+    const detailCustomerElement = document.getElementById("detail-customer");
     const tableDataElement = document.getElementById("table-data");
-    const users = document.getElementsByClassName("users");
+    const users = document.getElementsByClassName("customer");
     const openformElement = document.getElementById("open-form");
     const cancelElement = document.getElementById("cancel");
     let lastPage = 0;
@@ -29,16 +29,6 @@ app.controller("homeController", ($scope, $http) => {
 
     const tbody = document.querySelector("tbody");
     $scope.aksi = true;
-
-
-    const elementAnggota = $(".anggota");
-
-    $(elementAnggota).each((index, element) => {
-        const label = $(element).prev('label');
-        label.attr("for", column[index]);
-        $(element).attr("id", column[index]);
-        $(element).attr("name", column[index]);
-    });
 
     // variabel handle pagination
     let prevnextPage = 0;
@@ -113,9 +103,9 @@ app.controller("homeController", ($scope, $http) => {
     }
 
 
-    $scope.get_data_pengguna = (a, b) => {
-        new PenggunaService($http).getDataPengguna(a, b, res => {
-            const { data, totalPages } = res;
+    const getDataCustomers=()=>{
+        new PenggunaService($http).getDataPengguna(itemPage,currentPage,res=>{
+            const {data,totalPages}=res;
             totalDataPage = totalPages
             $scope.pengguna = data;
             $(tbody).show();
@@ -129,8 +119,7 @@ app.controller("homeController", ($scope, $http) => {
             });
         });
     }
-
-    $scope.get_data_pengguna(currentPage, itemPage);
+    getDataCustomers(itemPage,currentPage);
 
     document.addEventListener("click", (evt) => {
         const target = evt.target;
@@ -139,6 +128,8 @@ app.controller("homeController", ($scope, $http) => {
             openForm(target);
         } else if (dataAction === 'save-form') {
             saveForm(target);
+        }else if (dataAction==='cancel-form') {
+            detailCustomer(0,null);
         }
     });
 
@@ -227,42 +218,56 @@ app.controller("homeController", ($scope, $http) => {
         }
     }
 
-    const showHideElement = (a, b) => {
-        detailUserElement.classList.add(a)
-        detailUserElement.classList.remove(b);
-        tableDataElement.classList.remove(a);
-        tableDataElement.classList.add(b);
-        openformElement.classList.remove(a);
-        openformElement.classList.add(b);
+    const generateFakePassword=(length)=> {
+        const sourceString = "840328408fds0f80ds8f048304830850438504850v8sd0f8ds9f8s9d8f0ds8f9";
+        let password = "";
+    
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * sourceString.length);
+            password += sourceString[randomIndex];
+        }
+    
+        return password;
+    }
+    const detailCustomer=(a,data)=>{
+        
+        if (a==0) {
+            detailCustomerElement.classList.add("hide");
+            tableDataElement.classList.remove("hide");
+        }else {
+            detailCustomerElement.classList.remove("hide");
+            tableDataElement.classList.add("hide");
+        }
+        let customer =document.querySelectorAll(".customer");
+        customer.forEach(row=>{
+           row.classList.add("font-12");
+        });
+        if(data){
+            customer[0].value=data.name;
+            customer[1].value=data.email;
+            customer[2].value=data.customer.phone;
+            customer[3].value=data.customer.alamat;
+            customer[4].value=data.customer.postal_kode;
+            customer[5].value=data.username;
+            customer[6].value=generateFakePassword(32);
+        }
+       
     }
     $scope.editData = (row) => {
-        showHideElement("show", "hide");
-        users[0].value = row.firstname;
-        users[1].value = row.lastname;
-        users[2].value = row.email;
-        users[3].value = row.phone;
-        users[4].value = row.adress;
-        users[5].value = row.username;
-        users[6].value = "djalsjdlsajdlasjdlasjdlasueiwur439850943850943850934859";
-        let roles = 0;
-        if (row.roles === 'CUSTOMER') {
-            roles = 2;
-        } else if (row.roles === 'KASIR') {
-            roles = 1;
-        }
-        users[7].value = roles;
+        detailCustomer(1,row);
+      
     }
 
-    $scope.hapusData = (id_user) => {
-        new PenggunaService($http).deleteDataPengguna(id_user, (res) => {
+    $scope.hapusData = (row) => {
+        const userid=row.customer.userid;
+        new PenggunaService($http).deleteDataPengguna(userid, (res) => {
             const { success } = res;
             if (success) {
                 swal({
                     text: "Hapus data pengguna berhasil",
                     icon: "success"
                 });
-                currentPage = 10;
-                $scope.get_data_pengguna(itemPage, currentPage, 0);
+                getDataCustomers();
                 return;
             }
             swal({

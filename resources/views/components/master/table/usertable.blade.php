@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-md-4">
                 <select class="right-content form-control poppins font-12" id="filter">
-                    <option value="firstname">Nama depan</option>
+                    <option value="firstname">Nama Lengkap</option>
                 </select>
             </div>
             <div class="col-md-8">
@@ -33,25 +33,25 @@
             <thead>
                 <tr class="text-center">
                     <th>No</th>
-                    <th>Nama Depan</th>
-                    <th>Nama Belakang</th>
+                    <th>Nama Lengkap</th>
                     <th>Email</th>
                     <th>Nomor Handphone</th>
-                    <th>Roles</th>
+                    <th>Alamat</th>
+                    <th>Nama Pengguna</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="row in pengguna" class="text-center">
                     <td>@{{ $index + 1 }}</td>
-                    <td>@{{ row.firstname }}</td>
-                    <td>@{{ row.lastname }}</td>
+                    <td>@{{ row.name }}</td>
                     <td>@{{ row.email }}</td>
-                    <td>@{{ row.phone }}</td>
-                    <td>@{{ row.roles }}
+                    <td>@{{ row.customer.phone }}</td>
+                    <td>@{{ row.customer.alamat }}</td>
+                    <td>@{{row.username}}</td>
                     <td>
                         <button class="btn btn-warning" ng-click="editData(row)">Detail Data</button>
-                        <button class="btn btn-danger" ng-click="hapusData(row.id)">Hapus Data</button>
+                        <button class="btn btn-danger" ng-click="hapusData(row)">Hapus Data</button>
                     </td>
                 </tr>
             </tbody>

@@ -1,93 +1,50 @@
-<div class="row hide font-12" id="detail-user">
-    <div class="col-md-12">
-        <div class="row mt-5">
-            <div class="col-md-4">
-                <div class="img-anggota">
-                    <img src="" id="load_image"
-                        onerror="this.onerror=null;this.src='https://via.assets.so/img.jpg?w=1200&h=500&t=%20'">
-                </div>
+<div class="customer-form hide font-12" id="detail-customer">
+    <div class="form-container">
+        <h3 class="font-14 bold">Form Customer</h3>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="nama_produk" class="form-label">Nama Lengkap</label>
+                <input type="text" class="form-control customer" id="nama_lengkap" name="nama_lengkap"
+                    required>
             </div>
-            <div class="col-md-7">
-                <p class="poppins font-15">Profil Akun</p>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group poppins font-12">
-                            <label>Nama depan</label>
-                            <input type="text" class="form-control users"disabled />
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group poppins font-12">
-                            <label>Nama belakang</label>
-                            <input type="text" class="form-control users" disabled />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="form-group poppins font-12">
-                            <label>Email</label>
-                            <input type="email" class="form-control users" disabled />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group poppins font-12">
-                            <label>Nomor Telepeon</label>
-                            <input type="text" class="form-control users" disabled />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group poppins font-12">
-                            <label>Alamat</label>
-                            <textarea class="form-control users"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+        <div class="col-md-4 mb-3">
+            <label for="ukuran_ayam" class="form-label">Email</label>
+            <input type="email" class="form-control customer" id="email" name="email" required>
         </div>
 
-        <div class="row">
-            <div class="col-md-12 mt-5">
-                <div class="">
-                    <p class="poppins font-15">Akses Akun</p>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group poppins font-12">
-                                <label>Nama Pengguna</label>
-                                <input type="text" class="form-control users" disabled />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group poppins font-12">
-                                <label>Kata Sandi</label>
-                                <input type="password" class="form-control users" disabled />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group poppins font-12">
-                                <label>Roles</label>
-                                <select class="right-content form-control users poppins" id="roles">
-                                    <option value="0">Admin</option>
-                                    <option value="1">Kasir</option>
-                                    <option value="2">Customer</option>
-                                    <!-- Add more options as needed -->
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-4 mb-3">
+            <label for="bagian_ayam" class="form-label">Nomor Telepon</label>
+            <input type="text" class="form-control customer" id="phone" name="phone" required>
         </div>
     </div>
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-primary" id="save" data-action="save-form">Simpan</button>
-                <button class="btn btn-danger" id="cancel" ng-click="batal()">Kembali</button>
-            </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label for="harga" class="form-label">Alamat</label>
+            <input type="text" class="form-control customer" id="alamat" name="alamat">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="stok" class="form-label">Postal Kode</label>
+            <input type="number" class="form-control customer" id="postal_kode" name="postal_kode" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label for="harga" class="form-label">Username</label>
+            <input type="text" class="form-control customer" id="username" name="username">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="stok" class="form-label">Password</label>
+            <input type="password" class="form-control customer" id="old" name="old" required disabled>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="stok" class="form-label">Password Baru</label>
+            <input type="password" class="form-control customer" id="password" name="password" required>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn btn-primary poppins" id="save-form" data-action="save-form">Simpan Produk</button>
+            <button class="btn btn-danger poppins" id="cancel-form" data-action="cancel-form">Kembali</button>
         </div>
     </div>
 </div>

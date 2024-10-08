@@ -6,12 +6,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <p class="poppins font-13 bold">Data Produk</p>
+                    <p class="poppins font-13 bold">Data Jenis Ayam</p>
                 </div>
                 <div class="col-sm-6 poppins font-13">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Data Produk</li>
+                        <li class="breadcrumb-item active">Data Jenis Ayam</li>
                     </ol>
                 </div>
             </div>
@@ -34,11 +34,12 @@
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <h5 class="font-13 bold">Data Produk</h5>
+                                        <h5 class="font-13 bold">Data Jenis Ayam</h5>
                                     </div>
 
                                     <div class="col-md-2 pull-right">
-                                        <button class="btn btn-primary poppins" id="open-form" data-action="open-form">Tambah
+                                        <button class="btn btn-primary poppins" id="open-form" data-action="open-form"
+                                            data-toggle="modal" data-target="#jenisModal">Tambah
                                             Data</button>
                                     </div>
                                 </div>
@@ -48,11 +49,10 @@
 
                                 <div id="table-fakultas" style="font-family:font1;font-size:13px">
                                     <div class="data-kategori">
-                                        <x-master.table.producttable />
+                                        <x-master.table.jenisayamtable />
                                     </div>
                                 </div>
-                                <x-master.form.productform />
-                                <x-master.form.productfoto />
+                                <x-master.modal.jenisayammodal />
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -70,7 +70,7 @@
 
 <div id="cover-spin"></div>
 <x-master.layout.footer />
-<script type="module" src="{{ asset('dist/js/admin/product/app.js') }}"></script>
+<script type="module" src="{{ asset('dist/js/admin/jenis/app.js') }}"></script>
 </body>
 
 </html>

@@ -32,13 +32,13 @@ class Page extends Controller
         return view("components.master.template.user", compact("data"));
     }
 
-    public function kategori()
+    public function jenis()
     {
-        $data["title"] = "Kategori";
+        $data["title"] = "Jenis";
         $data["user"] = (object) [
             "name" => "Admin"
         ];
-        return view("components.master.template.kategori", compact("data"));
+        return view("components.master.template.jenisayam", compact("data"));
     }
 
     public function satuan()
@@ -51,18 +51,9 @@ class Page extends Controller
         return view("components.master.template.satuan", compact("data"));
     }
 
-
-    public function suplier()
-    {
-        $data["title"] = "Suplier";
-        $data["user"] = (object) [
-            "name" => "Admin"
-        ];
-        return view("components.master.template.suplier", compact("data"));
-    }
     public function product()
     {
-        $data["title"] = "Product";
+        $data["title"] = "Ayam";
         $data["user"] = (object) [
             "name" => "Admin"
         ];
