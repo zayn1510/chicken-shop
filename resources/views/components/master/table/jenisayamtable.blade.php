@@ -32,6 +32,7 @@
                     <th>Keterangan</th>
                     <th>Berat</th>
                     <th>Harga</th>
+                    <th>Stok</th>
                     <th>Aksi</th>
                 </tr>
             </thead>

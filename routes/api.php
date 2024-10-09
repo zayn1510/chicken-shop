@@ -4,6 +4,7 @@ use App\Http\Controllers\api\v1\AuthController;
 use App\Http\Controllers\api\v1\master\CustomerController;
 use App\Http\Controllers\api\v1\master\JenisAyamController;
 use App\Http\Controllers\api\v1\master\ProdukMediaController;
+use App\Http\Controllers\api\v1\master\StokMasukController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\v1\master\ProdukController;
@@ -75,6 +76,12 @@ Route::prefix("v1")->group(function () {
         Route::post("/", [JenisAyamController::class, "addData"]);
         Route::put("/{id}", [JenisAyamController::class, "updateData"]);
         Route::delete("{id}", [JenisAyamController::class, "deleteData"]);
-
+    });
+    Route::prefix("stok_masuk")->group(function () {
+        Route::get("/{a}/{b}/{c}", [StokMasukController::class, "getData"]);
+        Route::get("/{a}", [StokMasukController::class, "detailData"]);
+        Route::post("/", [StokMasukController::class, "addData"]);
+        Route::put("/{id}", [StokMasukController::class, "updateData"]);
+        Route::delete("{id}", [StokMasukController::class, "deleteData"]);
     });
 });

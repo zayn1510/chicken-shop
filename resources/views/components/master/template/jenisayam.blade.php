@@ -53,6 +53,9 @@
                                     </div>
                                 </div>
                                 <x-master.modal.jenisayammodal />
+                                <x-master.form.productfoto />
+                                <x-master.table.stok-table />
+
                             </div>
                             <!-- /.card-body -->
                         </div>

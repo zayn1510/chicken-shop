@@ -1,6 +1,13 @@
 <div class="product-foto-form hide font-12">
     <div class="form-container">
-        <h3 class="font-14 bold">Foto Produk</h3>
+        <div class="row">
+          <div class="col-md-10">
+            <h3 class="font-14 bold">Kelola Foto Produk</h3>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-danger"  data-action="kembali">Kembali</button>
+          </div>
+        </div>
         <div class="row">
             <div class="col-md-12 mb-12">
                 <table class="table table-bordered poppins font-12" id="table-foto">

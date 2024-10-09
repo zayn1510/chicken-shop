@@ -32,28 +32,19 @@ class Page extends Controller
         return view("components.master.template.user", compact("data"));
     }
 
-    public function jenis()
+   
+    public function ayam()
     {
-        $data["title"] = "Jenis";
+        $data["title"] = "Ayam";
         $data["user"] = (object) [
             "name" => "Admin"
         ];
         return view("components.master.template.jenisayam", compact("data"));
     }
 
-    public function satuan()
+    public function tambah_stok_ayam()
     {
-        $data["title"] = "";
-        $data["title"] = "Satuan";
-        $data["user"] = (object) [
-            "name" => "Admin"
-        ];
-        return view("components.master.template.satuan", compact("data"));
-    }
-
-    public function product()
-    {
-        $data["title"] = "Ayam";
+        $data["title"] = "Tambah Stok Ayam";
         $data["user"] = (object) [
             "name" => "Admin"
         ];

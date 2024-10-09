@@ -111,38 +111,34 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('jenis') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Jenis</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a href="{{ url('ayam') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p class="poppins font-13">Ayam</p>
                                     </a>
                                 </li>
+                                
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-box"></i>
                                 <p class="poppins font-13">
-                                    Data Transaksi
+                                    Riwayat Stok Ayam
                                     <i class="right fas fa-angle-right"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
+                                
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/dashboard/penawaran') }}" class="nav-link">
+                                    <a href="{{ url('admin/dashboard/pemenang') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Pembelian</p>
+                                        <p class="poppins font-13">Masuk</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ url('admin/dashboard/pemenang') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Penjualan</p>
+                                        <p class="poppins font-13">Keluar</p>
                                     </a>
                                 </li>
                         </li>

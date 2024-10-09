@@ -1,5 +1,7 @@
 import * as lib from "../../helpers/lib.js";
 import JenisService from "../../services/jenis.js";
+import ProductsService from "../../services/products.js";
+import StokService from "../../services/stok_masuk.js";
 var app = angular.module("homeApp", ['ngRoute']);
 app.controller("homeController", ($scope, $http) => {
 
@@ -11,12 +13,15 @@ app.controller("homeController", ($scope, $http) => {
     const prevPage = document.getElementById("prevPage");
     const nextPage = document.getElementById("nextPage");
     const tableElement = document.querySelector(".table-jenis");
+    const productFoto = document.querySelector(".product-foto-form");
+    const productStok = document.querySelector(".product-stok");
     const price = document.getElementById("harga");
     var toast = document.getElementById("toast");
     let totalPagesTemp = 0;
     let aksi = 0;
     var tempidproduk = 0;
     let add = true;
+    let tempidjenis = 0;
 
 
     const getDataJenis = () => {
@@ -114,9 +119,219 @@ app.controller("homeController", ($scope, $http) => {
             deleteJenis(dataid);
         } else if (dataaction === 'preview-foto') {
             window.open("api/v1/photo/" + res.target.getAttribute("data-value"), "_blank");
+        } else if (dataaction === 'foto-product') {
+            tableElement.classList.add("hide");
+            productFoto.classList.remove("hide")
+            document.getElementById("open-form").classList.add("hide");
+            add = false;
+            getDataPhoto(dataid);
+        } else if (dataaction === 'removeupload') {
+            resetUploadFoto();
+        } else if (dataaction === 'uploadfoto') {
+            var fileinput = document.getElementById("fileInput");
+            var formData = new FormData();
+            formData.append("produk", tempidproduk);
+            formData.append("idfoto", 0);
+            formData.append("foto", fileinput.files[0]);
+
+
+            new ProductsService($http).createPhoto(formData, res => {
+
+                const { success } = res;
+                if (success) {
+                    swal({
+                        text: "Tambah Foto Berhasil !",
+                        icon: "success"
+                    });
+                    $('#modalFoto').modal('hide');
+                    getDataPhoto(tempidproduk);
+                    resetUploadFoto();
+                } else {
+                    swal({
+                        text: "Tambah Foto Gagal !",
+                        icon: "error"
+                    });
+                }
+
+            });
+
+        } else if (dataaction === 'hapus-foto') {
+            deletePhoto(dataid);
+        } else if (dataaction === 'kembali') {
+            tableElement.classList.remove("hide");
+            productFoto.classList.add("hide");
+            productStok.classList.add("hide");
+            document.getElementById("open-form").classList.remove("hide");
+        } else if (dataaction === 'stok-product') {
+            tableElement.classList.add("hide");
+            productStok.classList.remove("hide");
+            document.getElementById("open-form").classList.add("hide");
+            getDataStok(dataid);
+
+        } else if (dataaction === 'save-stok') {
+            postStok(dataid);
+        } else if (dataaction === 'hapus-stok') {
+            deleteStok(dataid);
         }
     });
 
+    const postStok = (dataid) => {
+        const data = {
+            jenis_ayam: parseInt(tempidjenis),
+            jumlah: parseInt(document.getElementById("jumlah").value),
+            tanggal_masuk: document.getElementById('tglmsk').value
+        };
+        new StokService($http).createDataStok(data, res => {
+            const { success } = res;
+            if (!success) {
+                swal({
+                    text: "Stok gagal ditambahkan !",
+                    icon: "error"
+                });
+                return;
+            }
+            getDataStok(tempidjenis);
+
+        })
+    }
+
+    const deletePhoto = (idfoto) => {
+        new ProductsService($http).deletePhoto(idfoto, tempidproduk, res => {
+            const { success } = res;
+            if (!success) {
+                swal({
+                    text: "Hapus foto gagal !",
+                    icon: "error"
+                });
+            }
+            getDataPhoto(tempidproduk);
+            resetUploadFoto();
+        });
+    }
+
+    const resetUploadFoto = () => {
+        document.getElementById('uploadBox').style.display = 'block';
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('uploadedImage').src = "";
+    }
+
+    const getDataPhoto = (produkid) => {
+        tempidproduk = produkid;
+        new ProductsService($http).getPhoto(10, 0, produkid, res => {
+            const { data } = res;
+            createTablePhoto(data);
+        });
+    }
+    const createStokAyam = (data) => {
+        const tableFoto = document.getElementById("table-stok");
+        let tbodyfoto = document.createElement("tbody");
+        let existingTbody = tableFoto.getElementsByTagName("tbody")[0];
+        if (existingTbody) {
+            existingTbody.remove();
+        }
+        tbodyfoto.innerHTML = "";
+        tableFoto.append(tbodyfoto);
+        const numRowsToDisplay = Math.min(data.length, 10);
+        for (let i = 0; i < numRowsToDisplay; i++) {
+            const skeletonRow = createSkeletonRow(3);
+            tbodyfoto.appendChild(skeletonRow);
+        }
+        setTimeout(() => {
+            tbodyfoto.innerHTML = "";
+            if (data.length === 0) {
+                tbodyfoto.innerHTML = `
+                        <tr class='text-center'>
+                            <td colspan="3">Tidak ada data yang tersedia</td>
+                        </tr>
+                    `;
+            } else {
+                tbodyfoto.innerHTML += data.map((row, index) => `
+                        <tr class='text-center'>
+                            <td>${index + 1}</td>
+                            <td>${row.jumlah}</td>
+                            <td>
+                                <button class="btn btn-danger" data-action="hapus-stok" data-value=${row.id}>Hapus Foto</button>
+                            </td>
+                        </tr>
+                    `).join('');
+            }
+
+            tbodyfoto.innerHTML += `
+                <tr class='text-center'>
+                    <td>
+                        ${data.length + Number(1)}
+                    </td>
+                    <td style="color:red">Belum ada stok</td>
+                    <td>
+                        <button class="btn btn-success"  data-toggle="modal" data-target="#modalStok">Tambah Stok</button>
+                    </td>
+                </tr>
+            `;
+        }, 1000)
+    }
+
+    const deleteStok = (dataid) => {
+        new StokService($http).deleteDataStok(dataid, res => {
+            const { success } = res;
+            if (!success) {
+                swal({
+                    text: "Stok gagal dihapus !",
+                    icon: "error"
+                });
+                return;
+            }
+            getDataStok(tempidjenis);
+
+        })
+    }
+    const createTablePhoto = (data) => {
+        const tableFoto = document.getElementById("table-stok");
+        let tbodyfoto = document.createElement("tbody");
+        let existingTbody = tableFoto.getElementsByTagName("tbody")[0];
+        if (existingTbody) {
+            existingTbody.remove();
+        }
+        tbodyfoto.innerHTML = "";
+        tableFoto.append(tbodyfoto);
+        const numRowsToDisplay = Math.min(data.length, 10);
+        for (let i = 0; i < numRowsToDisplay; i++) {
+            const skeletonRow = createSkeletonRow(3);
+            tbodyfoto.appendChild(skeletonRow);
+        }
+        setTimeout(() => {
+            tbodyfoto.innerHTML = "";
+            if (data.length === 0) {
+                tbodyfoto.innerHTML = `
+                        <tr class='text-center'>
+                            <td colspan="3">Tidak ada data yang tersedia</td>
+                        </tr>
+                    `;
+            } else {
+                tbodyfoto.innerHTML += data.map((row, index) => `
+                        <tr class='text-center'>
+                            <td>${index + 1}</td>
+                            <td>${row.media_url}</td>
+                            <td>
+                                <button class="btn btn-warning" data-action="preview-foto" data-value=${row.id}>Preview Foto</button>
+                                <button class="btn btn-danger" data-action="hapus-foto" data-value=${row.id}>Hapus Foto</button>
+                            </td>
+                        </tr>
+                    `).join('');
+            }
+
+            tbodyfoto.innerHTML += `
+                <tr class='text-center'>
+                    <td>
+                        ${data.length + Number(1)}
+                    </td>
+                    <td style="color:red">Belum ada foto</td>
+                    <td>
+                        <button class="btn btn-success"  data-toggle="modal" data-target="#modalFoto">Tambah Foto</button>
+                    </td>
+                </tr>
+            `;
+        }, 1000)
+    }
 
     const hapusProduct = (dataid) => {
         new ProductsService($http).delete(dataid, res => {
@@ -147,6 +362,14 @@ app.controller("homeController", ($scope, $http) => {
                 });
 
             }
+        });
+    }
+
+    const getDataStok = (dataid) => {
+        tempidjenis = dataid;
+        new StokService($http).getDataStok(pageSize, PageNumber, dataid, res => {
+            const { data } = res;
+            createStokAyam(data);
         });
     }
 
@@ -181,7 +404,10 @@ app.controller("homeController", ($scope, $http) => {
               <td>${row.keterangan}</td>
               <td>${row.berat}</td>
               <td>${row.harga}</td>
+              <td>${row.stok}</td>
               <td>
+                        <button class="btn btn-success" data-action="foto-product" data-value=${row.id}>Foto Ayam</button>
+                          <button class="btn btn-info" data-action="stok-product" data-value=${row.id}>Stok Ayam</button>
                         <button class="btn btn-warning" data-action="detail-jenis" data-value=${row.id} data-toggle="modal" data-target="#jenisModal">Detail Data</button>
                         <button class="btn btn-danger" data-action="hapus-jenis" data-value=${row.id}>Hapus Data</button>
               </td>
