@@ -3,6 +3,8 @@
 use App\Http\Controllers\api\v1\AuthController;
 use App\Http\Controllers\api\v1\master\CustomerController;
 use App\Http\Controllers\api\v1\master\JenisAyamController;
+use App\Http\Controllers\api\v1\master\KeranjangController;
+use App\Http\Controllers\api\v1\master\OrderController;
 use App\Http\Controllers\api\v1\master\ProdukMediaController;
 use App\Http\Controllers\api\v1\master\StokMasukController;
 use Illuminate\Http\Request;
@@ -84,4 +86,19 @@ Route::prefix("v1")->group(function () {
         Route::put("/{id}", [StokMasukController::class, "updateData"]);
         Route::delete("{id}", [StokMasukController::class, "deleteData"]);
     });
+    Route::prefix("stok_masuk_by")->group(function () {
+        Route::get("/{a}/{b}/{c}", [StokMasukController::class, "getDataByStokMasuk"]);
+    });
+    Route::prefix("keranjang-user")->group(function () {
+        Route::get("/{a}/{b}", [KeranjangController::class, "getKeranjang"]);
+        Route::post("/", [KeranjangController::class, "addKeranjang"]);
+    });
+
+    Route::prefix("orders-user")->group(function () {
+        Route::get("/{a}/{b}", [OrderController::class, "getOrder"]);
+        Route::post("/", [OrderController::class, "orderAyam"]);
+    });
+
+
+
 });

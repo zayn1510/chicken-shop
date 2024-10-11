@@ -9,11 +9,25 @@ use DB;
 class StokMasukServices
 {
 
-    function get_data(int $itempage, int $startPage, int $jenis_ayam): JsonResponse
+    function get_data_by_stok_masuk(int $itempage, int $startPage, int $jenis_ayam): JsonResponse
     {
         try {
-            $data = StokModels::where("jenis_ayam", $jenis_ayam)
-                ->paginate($itempage, ["*"], "page", $startPage);
+            $totalstok = 0;
+            if ($jenis_ayam == 0) {
+                $data = DB::table('stok_masuk')
+                    ->join('jenis_ayam', 'stok_masuk.jenis_ayam', '=', 'jenis_ayam.id')
+                    ->select('stok_masuk.*', 'jenis_ayam.jenis')
+                    ->paginate($itempage, ['*'], 'page', $startPage);
+                $totalstok=StokModels::sum("jumlah");
+            } else {
+                $data = DB::table('stok_masuk')
+                    ->where("jenis_ayam", $jenis_ayam)
+                    ->join('jenis_ayam', 'stok_masuk.jenis_ayam', '=', 'jenis_ayam.id')
+                    ->select('stok_masuk.*', 'jenis_ayam.jenis')
+                    ->paginate($itempage, ['*'], 'page', $startPage);
+               
+            }
+
             return response()->json(
                 [
                     "message" => "success",
@@ -23,13 +37,50 @@ class StokMasukServices
                     'itemsPerPage' => $itempage,
                     "currentPage" => $data->currentPage(),
                     'data' => $data->items(),
-                    
+
+
                 ]
             );
         } catch (\Throwable $th) {
             return response()->json(
                 [
-                    "message" => "error in database " . $th->getLine(),
+                    "message" => "error in database " . $th->getLine() . " " . $th->getMessage(),
+                    "success" => false,
+                ],
+                500
+            );
+        }
+    }
+    function get_data(int $itempage, int $startPage, int $jenis_ayam): JsonResponse
+    {
+        try {
+
+            if ($jenis_ayam == 0) {
+                $data = DB::table('stok_masuk')
+                    ->join('jenis_ayam', 'stok_masuk.jenis_ayam', '=', 'jenis_ayam.id')
+                    ->select('stok_masuk.*', 'jenis_ayam.jenis')
+                    ->paginate($itempage, ['*'], 'page', $startPage);
+            } else {
+                $data = StokModels::where("jenis_ayam", $jenis_ayam)
+                    ->paginate($itempage, ["*"], "page", $startPage);
+            }
+
+            return response()->json(
+                [
+                    "message" => "success",
+                    "success" => true,
+                    'totalItems' => $data->total(),
+                    'totalPages' => $data->lastPage(),
+                    'itemsPerPage' => $itempage,
+                    "currentPage" => $data->currentPage(),
+                    'data' => $data->items(),
+
+                ]
+            );
+        } catch (\Throwable $th) {
+            return response()->json(
+                [
+                    "message" => "error in database " . $th->getLine() . " " . $th->getMessage(),
                     "success" => false,
                 ],
                 500

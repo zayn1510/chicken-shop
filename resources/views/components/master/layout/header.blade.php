@@ -111,7 +111,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('ayam') }}" class="nav-link">
+                                    <a href="{{ url('dashboard/ayam') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p class="poppins font-13">Ayam</p>
                                     </a>
@@ -130,7 +130,7 @@
                             <ul class="nav nav-treeview">
                                 
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/dashboard/pemenang') }}" class="nav-link">
+                                    <a href="{{ url('dashboard/stok/masuk') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p class="poppins font-13">Masuk</p>
                                     </a>

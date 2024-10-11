@@ -87,7 +87,7 @@ app.controller("homeController", ($scope, $http) => {
 
 
     const setSkeltonRow = (data) => {
-        const tbody = document.querySelectorAll("tbody")[0];
+        const tbody = document.querySelector("tbody");
         tbody.innerHTML = "";
         const numRowsToDisplay = Math.min(data.length, 10);
 
@@ -104,9 +104,7 @@ app.controller("homeController", ($scope, $http) => {
               <td>${index + 1}</td>
               <td>${row.jenis}</td>
               <td>${row.jumlah}</td>
-              <td>${row.tanggal_masuk}</td>
             </tr > `);
-          
         }, 1000)
 
     }

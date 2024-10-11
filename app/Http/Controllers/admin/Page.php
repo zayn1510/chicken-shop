@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\api\v1\master\JenisAyamModels;
+use App\Models\api\v1\master\StokModels;
 use Illuminate\Http\Request;
 
 class Page extends Controller
@@ -16,9 +18,9 @@ class Page extends Controller
         ];
         $data["card"] = [
             "user" => 10,
-            "kategori" => 10,
-            "produk" => 10,
-            "lapak" => 10,
+            "ayam" => JenisAyamModels::count(),
+            "stok_masuk" => StokModels::sum("jumlah"),
+            "stok_keluar" => 10,
         ];
         return view("dashboard", compact("data"));
     }
@@ -49,6 +51,15 @@ class Page extends Controller
             "name" => "Admin"
         ];
         return view("components.master.template.product", compact("data"));
+    }
+
+    public function stok_masuk_ayam()
+    {
+        $data["title"] = "Stok Masuk Ayam";
+        $data["user"] = (object) [
+            "name" => "Admin"
+        ];
+        return view("components.master.template.stok_masuk", compact("data"));
     }
 
 

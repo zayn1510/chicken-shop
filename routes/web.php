@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get("dashboard", [Page::class, "dashboard"])->name("dashboard");
 Route::get("/", [Page::class, "login"]);
-Route::get("users", [Page::class, "users"])->name("users");
-Route::get("ayam", [Page::class, "ayam"])->name("ayam");
-Route::get("tambah_stok_ayam", [Page::class, "tambah_stok_ayam"])->name("tambah_stok_ayam");
-Route::get("tambah_foto_ayam", [Page::class, "tambah_foto_ayam"])->name("tambah_foto_ayam");
+Route::group(['prefix' => 'dashboard'], function () {
+    Route::get("/", [Page::class, "dashboard"])->name("dashboard");
+    Route::get("users", [Page::class, "users"])->name("dashboard.users");
+    Route::get("ayam", [Page::class, "ayam"])->name("dashboard.ayam");
+    Route::get("stok/masuk", [Page::class, "stok_masuk_ayam"])->name("dashboard.stok.masuk");
+});
+
 Route::post("login", [\App\Http\Controllers\api\v1\AuthController::class, "login"]);

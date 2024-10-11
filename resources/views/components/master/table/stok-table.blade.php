@@ -38,11 +38,11 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="jumlah" class="form-label font-12">Jumlah</label>
-                    <input type="text" class="form-control font-12 stok" id="jumlah" name="jumlah" value="0">
+                    <input type="number" class="form-control font-12 stok" id="jumlah" name="jumlah">
                 </div>
                 <div class="form-group">
                     <label for="tglmsk" class="form-label  font-12">Tanggal Masuk</label>
-                    <input type="date" class="form-control stok  font-12" id="tglmsk" name="tglmsk" value="0">
+                    <input type="date" class="form-control stok  font-12" id="tglmsk" name="tglmsk">
                 </div>
             </div>
             <div class="modal-footer">

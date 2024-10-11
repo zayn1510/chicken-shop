@@ -5,23 +5,24 @@ namespace App\Models\api\v1\master;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StokModels extends Model
+class OrderModel extends Model
 {
     use HasFactory;
-    protected $table="stok_masuk";
+
+    protected $table="orders";
     protected $primaryKey="id";
     public $timestamps=true;
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     use HasFactory;
     protected $fillable = [
-       "jenis_ayam",
-       "jumlah",
-       "tanggal_masuk"
+     "user_id",
+     "total",
+     "status",
+     "nomor_order"
     ];
 
-    public function jenis_ayam()
-    {
-        return $this->belongsTo(JenisAyamModels::class);
+    public function order_details(){
+        return $this->hasMany(DetailOrdersModel::class,"order_id");
     }
 }

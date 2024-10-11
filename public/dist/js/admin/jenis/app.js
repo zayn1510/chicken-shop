@@ -59,6 +59,7 @@ app.controller("homeController", ($scope, $http) => {
 
             convertToRupiah()
         }
+
     });
 
     document.addEventListener("change", evt => {
@@ -162,6 +163,7 @@ app.controller("homeController", ($scope, $http) => {
             productFoto.classList.add("hide");
             productStok.classList.add("hide");
             document.getElementById("open-form").classList.remove("hide");
+            getDataJenis();
         } else if (dataaction === 'stok-product') {
             tableElement.classList.add("hide");
             productStok.classList.remove("hide");
@@ -175,24 +177,43 @@ app.controller("homeController", ($scope, $http) => {
         }
     });
 
+    const clearFormStok = () => {
+        document.getElementById("jumlah").value = "";
+        document.getElementById("tglmsk").value = "";
+    }
+
+    const setError = (input, placeholderText = "") => {
+        input.classList.add("error-border");
+        if (placeholderText) {
+            input.placeholder = placeholderText;
+        }
+    }
     const postStok = (dataid) => {
         const data = {
             jenis_ayam: parseInt(tempidjenis),
             jumlah: parseInt(document.getElementById("jumlah").value),
             tanggal_masuk: document.getElementById('tglmsk').value
         };
-        new StokService($http).createDataStok(data, res => {
-            const { success } = res;
-            if (!success) {
-                swal({
-                    text: "Stok gagal ditambahkan !",
-                    icon: "error"
-                });
-                return;
-            }
-            getDataStok(tempidjenis);
-
-        })
+        const jumlahInput = document.getElementById("jumlah");
+        const tglmskInput = document.getElementById("tglmsk");
+        if (jumlahInput.value.length === 0) {
+            setError(jumlahInput, "Masukkan jumlah yang benar");
+        } else if (tglmskInput.value.length === 0) {
+            setError(tglmskInput);
+        } else {
+            new StokService($http).createDataStok(data, res => {
+                const { success } = res;
+                if (!success) {
+                    swal({
+                        text: "Stok gagal ditambahkan!",
+                        icon: "error"
+                    });
+                    return;
+                }
+                getDataStok(tempidjenis);
+                clearFormStok();
+            });
+        }
     }
 
     const deletePhoto = (idfoto) => {
@@ -250,7 +271,7 @@ app.controller("homeController", ($scope, $http) => {
                             <td>${index + 1}</td>
                             <td>${row.jumlah}</td>
                             <td>
-                                <button class="btn btn-danger" data-action="hapus-stok" data-value=${row.id}>Hapus Foto</button>
+                                <button class="btn btn-danger" data-action="hapus-stok" data-value=${row.id}>Hapus Stok</button>
                             </td>
                         </tr>
                     `).join('');
@@ -285,7 +306,8 @@ app.controller("homeController", ($scope, $http) => {
         })
     }
     const createTablePhoto = (data) => {
-        const tableFoto = document.getElementById("table-stok");
+       
+        const tableFoto = document.getElementById("table-foto");
         let tbodyfoto = document.createElement("tbody");
         let existingTbody = tableFoto.getElementsByTagName("tbody")[0];
         if (existingTbody) {
@@ -367,7 +389,7 @@ app.controller("homeController", ($scope, $http) => {
 
     const getDataStok = (dataid) => {
         tempidjenis = dataid;
-        new StokService($http).getDataStok(pageSize, PageNumber, dataid, res => {
+        new StokService($http).getDataStok(100, PageNumber, dataid, res => {
             const { data } = res;
             createStokAyam(data);
         });
@@ -487,7 +509,7 @@ app.controller("homeController", ($scope, $http) => {
     }
 
     const changeBorder = () => {
-        const suplierElement = document.querySelectorAll('.product');
+        const suplierElement = document.querySelectorAll('.jenis');
         suplierElement.forEach(element => {
             element.addEventListener("input", res => {
                 const target = res.target;
@@ -504,6 +526,12 @@ app.controller("homeController", ($scope, $http) => {
                         errorMessageElement.remove();
                     }
                 }
+            });
+        });
+        const stokElement = document.querySelectorAll(".stok");
+        stokElement.forEach(element => {
+            element.addEventListener("input", res => {
+                element.classList.remove("error-border");
             });
         });
     }

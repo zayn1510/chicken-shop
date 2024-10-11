@@ -20,6 +20,10 @@ class StokMasukController extends Controller
         return $this->stokmasuk->get_data($itemPage,$startPage,$jenis_ayam);
     }
 
+    function getDataByStokMasuk(int $itemPage,int $startPage,int $jenis_ayam): JsonResponse {
+        return $this->stokmasuk->get_data_by_stok_masuk($itemPage,$startPage,$jenis_ayam);
+    }
+
     function filterData(int $itemPage, int $startPage,string $search): JsonResponse {
         return $this->stokmasuk->filter_data($itemPage,$startPage,$search);
     }

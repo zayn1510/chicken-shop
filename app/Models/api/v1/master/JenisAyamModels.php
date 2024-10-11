@@ -21,4 +21,15 @@ class JenisAyamModels extends Model
        "harga",
        "stok"
     ];
+
+    public function stok_masuk()
+    {
+        return $this->hasMany(StokModels::class, 'jenis_ayam');
+    }
+    
+
+    public function keranjang()
+    {
+        return $this->belongsTo(KeranjangModel::class);
+    }
 }

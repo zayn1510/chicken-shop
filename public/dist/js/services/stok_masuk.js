@@ -16,6 +16,19 @@ class StokService {
             })
     }
 
+    getDataStokBy(a, b, c, callback) {
+        this.http({
+            url: `${API_SERVICE}stok_masuk_by/` + a + "/" + b + "/" + c,
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }).then(e => callback(e.data))
+            .catch(err => {
+                callback(err);
+            })
+    }
+
     createDataStok(data, callback) {
         this.http({
             url: `${API_SERVICE}stok_masuk`,
