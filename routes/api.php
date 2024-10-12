@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\api\v1\AuthController;
+use App\Http\Controllers\api\v1\master\BankController;
 use App\Http\Controllers\api\v1\master\CustomerController;
 use App\Http\Controllers\api\v1\master\JenisAyamController;
 use App\Http\Controllers\api\v1\master\KeranjangController;
+use App\Http\Controllers\api\v1\master\MetodeController;
 use App\Http\Controllers\api\v1\master\OrderController;
 use App\Http\Controllers\api\v1\master\ProdukMediaController;
 use App\Http\Controllers\api\v1\master\StokMasukController;
@@ -97,6 +99,23 @@ Route::prefix("v1")->group(function () {
     Route::prefix("orders-user")->group(function () {
         Route::get("/{a}/{b}", [OrderController::class, "getOrder"]);
         Route::post("/", [OrderController::class, "orderAyam"]);
+    });
+
+
+    Route::prefix("bank")->group(function () {
+        Route::get("/{a}/{b}", [BankController::class, "getBank"]);
+        Route::post("/", [BankController::class, "addBank"]);
+        Route::put("/{a}",[BankController::class,"updateBank"]);
+        Route::delete("/{a}",[BankController::class,"deleteBank"]);
+        Route::get("/{a}",[BankController::class,"detailBank"]);
+    });
+
+    Route::prefix("metode")->group(function () {
+        Route::get("/{a}/{b}", [MetodeController::class, "getMetode"]);
+        Route::post("/", [MetodeController::class, "addMetode"]);
+        Route::put("/{a}",[MetodeController::class,"updateMetode"]);
+        Route::delete("/{a}",[MetodeController::class,"deleteMetode"]);
+        Route::get("/{a}",[MetodeController::class,"detailMetode"]);
     });
 
 

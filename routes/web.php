@@ -21,6 +21,9 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get("users", [Page::class, "users"])->name("dashboard.users");
     Route::get("ayam", [Page::class, "ayam"])->name("dashboard.ayam");
     Route::get("stok/masuk", [Page::class, "stok_masuk_ayam"])->name("dashboard.stok.masuk");
+    Route::get("bank", [Page::class, "bank"])->name("dashboard.bank");
+    Route::get("metode", [Page::class, "metode"])->name("dashboard.metode");
+    
 });
 
 Route::post("login", [\App\Http\Controllers\api\v1\AuthController::class, "login"]);

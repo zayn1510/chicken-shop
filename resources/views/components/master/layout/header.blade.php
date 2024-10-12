@@ -105,6 +105,18 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
+                                    <a href="{{ url('dashboard/bank') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Bank</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('dashboard/metode') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Metode</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a href="{{ url('users') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p class="poppins font-13">Pengguna</p>
@@ -116,7 +128,7 @@
                                         <p class="poppins font-13">Ayam</p>
                                     </a>
                                 </li>
-                                
+
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -128,7 +140,7 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                
+
                                 <li class="nav-item">
                                     <a href="{{ url('dashboard/stok/masuk') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>

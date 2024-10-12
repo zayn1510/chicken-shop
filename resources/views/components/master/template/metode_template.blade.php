@@ -8,12 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <p class="poppins font-13 bold">Data Stok Masuk Ayam</p>
+                    <p class="poppins font-13 bold">Data Bank</p>
                 </div>
                 <div class="col-sm-6 poppins font-13">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Data Stok Masuk Ayam</li>
+                        <li class="breadcrumb-item active">Data Bank</li>
                     </ol>
                 </div>
             </div>
@@ -36,11 +36,13 @@
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <h5 class="font-13 bold">Data Stok Masuk Ayam</h5>
+                                        <h5 class="font-13 bold">Data Bank</h5>
                                     </div>
 
                                     <div class="col-md-2 pull-right">
-
+                                        <button class="btn btn-primary poppins" data-action="open-form"
+                                        data-toggle="modal" data-target="#metodeModal">Tambah
+                                        Data</button>
                                     </div>
                                 </div>
                             </div>
@@ -49,7 +51,8 @@
 
                                 <div id="table-fakultas" style="font-family:font1;font-size:13px">
                                     <div class="data-kategori">
-                                        <x-master.table.stok_masuk />
+                                        <x-master.table.metode_table />
+                                        <x-master.modal.metode_modal />
                                     </div>
                                 </div>
                                
@@ -70,7 +73,7 @@
 
 <div id="cover-spin"></div>
 <x-master.layout.footer />
-<script type="module" src="{{ asset('dist/js/admin/stok_masuk/app.js') }}"></script>
+<script type="module" src="{{ asset('dist/js/admin/metode/app.js') }}"></script>
 </body>
 
 </html>

@@ -62,6 +62,23 @@ class Page extends Controller
         return view("components.master.template.stok_masuk", compact("data"));
     }
 
+    public function bank()
+    {
+        $data["title"] = "Bank";
+        $data["user"] = (object) [
+            "name" => "Admin"
+        ];
+        return view("components.master.template.bank_template", compact("data"));
+    }
+
+    public function metode()
+    {
+        $data["title"] = "Metode";
+        $data["user"] = (object) [
+            "name" => "Admin"
+        ];
+        return view("components.master.template.metode_template", compact("data"));
+    }
 
     public function login()
     {
