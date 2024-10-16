@@ -54,7 +54,7 @@ class CustomersServices
                 "nama_lengkap"=>$request->nama_lengkap,
                 "phone" => $request->phone,
                 "alamat" => $request->alamat,
-                "postal_kode" => $request->postal_kode
+                
             ];
             CustomersModels::create($customers);
             DB::commit();

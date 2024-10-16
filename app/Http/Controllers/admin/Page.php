@@ -34,7 +34,7 @@ class Page extends Controller
         return view("components.master.template.user", compact("data"));
     }
 
-   
+
     public function ayam()
     {
         $data["title"] = "Ayam";
@@ -80,9 +80,34 @@ class Page extends Controller
         return view("components.master.template.metode_template", compact("data"));
     }
 
-    public function login()
+    public function admin()
     {
         return view("login");
     }
+
+    public function home()
+    {
+        return view("user.home");
+    }
+
+    public function pesan()
+    {
+        return view("user.pesan");
+    }
+    public function daftar()
+    {
+        return view("user.daftar");
+    }
+
+    public function login()
+    {
+        return view("user.login");
+    }
+
+    public function user_created()
+    {
+        return view("user.regis_success");
+    }
+
 
 }

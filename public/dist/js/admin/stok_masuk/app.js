@@ -7,20 +7,11 @@ app.controller("homeController", ($scope, $http) => {
     let id = 0;
     let pageSize = 10;
     let PageNumber = 0;
-    const openForm = document.getElementById("open-form");
-    const jenisData = document.querySelectorAll(".jenis")
     const prevPage = document.getElementById("prevPage");
     const nextPage = document.getElementById("nextPage");
-    const tableElement = document.querySelector(".table-jenis");
-    const productFoto = document.querySelector(".product-foto-form");
-    const productStok = document.querySelector(".product-stok");
-    const price = document.getElementById("harga");
     var toast = document.getElementById("toast");
     let totalPagesTemp = 0;
-    let aksi = 0;
-    var tempidproduk = 0;
-    let add = true;
-    let tempidjenis = 0;
+
 
 
     const getDataStokMasuk = () => {
@@ -31,7 +22,24 @@ app.controller("homeController", ($scope, $http) => {
         });
     }
 
+    const getDataJenisAyam = () => {
+        new JenisService($http).getDataJenis(100, 0, res => {
+            const { data } = res;
+
+
+            var jenisSelect = document.getElementById("jenis");
+            for (var index = 0; index < data.length; index++) {
+                const elemetOption = document.createElement("option");
+                elemetOption.value = data[index].id;
+                elemetOption.text = data[index].jenis;
+
+                jenisSelect.append(elemetOption);
+            }
+            console.info(jenisSelect);
+        });
+    }
     getDataStokMasuk();
+    getDataJenisAyam();
     const createSkeletonRow = (rows) => {
         const row = document.createElement("tr");
         row.classList.add("skeleton-row");
@@ -42,26 +50,6 @@ app.controller("homeController", ($scope, $http) => {
         }
         return row;
     }
-
-    document.addEventListener("input", evt => {
-        const dataaction = evt.target.getAttribute("data-action");
-        if (dataaction === 'search-name') {
-            const value = evt.target.value;
-            if (value.length > 0) {
-
-                new JenisService($http).filterDataJenis(pageSize, PageNumber, value, res => {
-                    const { data, totalPages } = res;
-                    initData(data, totalPages);
-                });
-            } else {
-                getDataJenis();
-            }
-        } else if (dataaction === 'price-action') {
-
-            convertToRupiah()
-        }
-
-    });
 
     document.addEventListener("change", evt => {
         const dataaction = evt.target.getAttribute("data-action");
@@ -75,6 +63,16 @@ app.controller("homeController", ($scope, $http) => {
                     document.getElementById('uploadedImage').src = e.target.result;
                 };
                 reader.readAsDataURL(file);  // Read file as Data URL
+            }
+        } else if (dataaction === 'search-jenis') {
+            const value = evt.target.value;
+            if (value.length > 0) {
+                new StokService($http).getDataStokBy(pageSize, PageNumber, value, res => {
+                    const { data, totalPages } = res;
+                    initData(data, totalPages);
+                });
+            } else {
+                getDataJenisAyam();
             }
         }
     });

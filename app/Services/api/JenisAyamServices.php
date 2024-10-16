@@ -11,7 +11,7 @@ class JenisAyamServices
     function get_data(int $itempage, int $startPage): JsonResponse
     {
         try {
-            $data = JenisAyamModels::paginate($itempage, ["*"], "page", $startPage);
+            $data = JenisAyamModels::with("produk_media")->paginate($itempage, ["*"], "page", $startPage);
             return response()->json(
                 [
                     "message" => "success",

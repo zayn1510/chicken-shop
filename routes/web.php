@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get("/", [Page::class, "login"]);
+Route::get("admin/login", [Page::class, "admin"]);
 Route::group(['prefix' => 'dashboard'], function () {
     Route::get("/", [Page::class, "dashboard"])->name("dashboard");
     Route::get("users", [Page::class, "users"])->name("dashboard.users");
@@ -23,7 +23,14 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get("stok/masuk", [Page::class, "stok_masuk_ayam"])->name("dashboard.stok.masuk");
     Route::get("bank", [Page::class, "bank"])->name("dashboard.bank");
     Route::get("metode", [Page::class, "metode"])->name("dashboard.metode");
-    
 });
+Route::get("/", [Page::class, "home"])->name("home");
+Route::get("/pesan", [Page::class, "pesan"])->name("pesan");
+Route::get("/daftar", [Page::class, "daftar"])->name("daftar");
+Route::get("/login-user", [Page::class, "login"])->name("login-user");
+Route::get("/regis-success", [Page::class, "user_created"]);
+
+
 
 Route::post("login", [\App\Http\Controllers\api\v1\AuthController::class, "login"]);
+

@@ -28,7 +28,6 @@ class CustomersRequest extends FormRequest
             "nama_lengkap" => "|string|required|max:50",
             "phone" => "string|max:12|required",
             "alamat" => "string|required|max:200",
-            "postal_kode" => "string|required|max:10",
             "password" => "string|required",
             "roles" => "integer|required"
         ];

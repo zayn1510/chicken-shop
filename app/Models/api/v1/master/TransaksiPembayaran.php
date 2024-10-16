@@ -8,4 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 class TransaksiPembayaran extends Model
 {
     use HasFactory;
+
+    protected $table = "transaksi_pembayarans";
+    protected $primaryKey = "id";
+    public $timestamps = true;
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+    use HasFactory;
+    protected $fillable = [
+        "order_id",
+        "metode_id",
+        "bank_id",
+        "total",
+        "status"
+    ];
+
+    public function orders()
+    {
+        return $this->hasOne(OrderModel::class, "id", "order_id");
+    }
+
+
+
 }

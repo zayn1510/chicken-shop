@@ -19,7 +19,6 @@ class CustomersModels extends Model
         "nama_lengkap",
         "phone",
         "alamat",
-        "postal_kode"
     ];
 
     public function user()

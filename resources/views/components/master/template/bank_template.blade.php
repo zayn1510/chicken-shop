@@ -8,12 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <p class="poppins font-13 bold">Data Bank</p>
+                    <p class="poppins font-13 bold">Data {{ $data["title"] }}</p>
                 </div>
                 <div class="col-sm-6 poppins font-13">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Data Bank</li>
+                        <li class="breadcrumb-item active">Data {{ $data["title"] }}</li>
                     </ol>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-md-10">
-                                        <h5 class="font-13 bold">Data Bank</h5>
+                                        <h5 class="font-13 bold">Data {{ $data["title"] }}</h5>
                                     </div>
 
                                     <div class="col-md-2 pull-right">

@@ -117,7 +117,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('users') }}" class="nav-link">
+                                    <a href="{{ url('dashboard/users') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p class="poppins font-13">Pengguna</p>
                                     </a>

@@ -13,6 +13,17 @@ class loginService {
                 callback(err);
             })
     };
+
+    login(data, callback) {
+        this.http({
+            url: `${API}authuser`,
+            method: "POST",
+            data: data,
+        }).then(e => callback(e.data))
+            .catch(err => {
+                callback(err);
+            })
+    };
 }
 
 export default loginService;

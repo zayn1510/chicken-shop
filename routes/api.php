@@ -9,6 +9,7 @@ use App\Http\Controllers\api\v1\master\MetodeController;
 use App\Http\Controllers\api\v1\master\OrderController;
 use App\Http\Controllers\api\v1\master\ProdukMediaController;
 use App\Http\Controllers\api\v1\master\StokMasukController;
+use App\Http\Controllers\api\v1\master\TransaksiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\v1\master\ProdukController;
@@ -30,7 +31,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post("login", [AuthController::class, "login"]);
+
 Route::prefix("v1")->group(function () {
+    Route::post("authuser", [AuthController::class, "authUser"]);
     Route::prefix("produk")->group(function () {
         Route::get("/{a}/{b}", [ProdukController::class, "getProduk"]);
         Route::get("/{a}", [ProdukController::class, "detailProduk"]);
@@ -116,6 +119,14 @@ Route::prefix("v1")->group(function () {
         Route::put("/{a}",[MetodeController::class,"updateMetode"]);
         Route::delete("/{a}",[MetodeController::class,"deleteMetode"]);
         Route::get("/{a}",[MetodeController::class,"detailMetode"]);
+    });
+
+    Route::prefix("transaksi-pembayaran")->group(function () {
+        Route::get("/{a}/{b}", [TransaksiController::class, "getTransaksiPembayaran"]);
+        Route::post("/", [TransaksiController::class, "addTransaksiPembayaran"]);
+        Route::put("/{a}",[TransaksiController::class,"updateTransaksiPembayaran"]);
+        Route::delete("/{a}",[TransaksiController::class,"deleteTransaksiPembayaran"]);
+        Route::get("/{a}",[TransaksiController::class,"detailTransaksiPembayaran"]);
     });
 
 

@@ -25,4 +25,25 @@ class AuthService
             ]
         );
     }
+
+    function loginUer(AuthRequest $authRequest): JsonResponse
+    {
+        $credentials = $authRequest->validated();
+        if (Auth::attempt($credentials)) {
+            return response()->json(
+                [
+                "message" => "success",
+                "status" => true,
+                "role"=>Auth::user()->roles,
+                "user"=>Auth::user()->id
+                ]
+            );
+        }
+        return response()->json(
+            [
+            "message" => "failed",
+            "status" => false
+            ]
+        );
+    }
 }

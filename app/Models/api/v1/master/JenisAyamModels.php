@@ -32,4 +32,9 @@ class JenisAyamModels extends Model
     {
         return $this->belongsTo(KeranjangModel::class);
     }
+
+    public function produk_media()
+    {
+        return $this->hasMany(MediaProdukModels::class,"produk_id");
+    }
 }
