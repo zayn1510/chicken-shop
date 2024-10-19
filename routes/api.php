@@ -126,9 +126,19 @@ Route::prefix("v1")->group(function () {
         Route::post("/", [TransaksiController::class, "addTransaksiPembayaran"]);
         Route::put("/{a}",[TransaksiController::class,"updateTransaksiPembayaran"]);
         Route::delete("/{a}",[TransaksiController::class,"deleteTransaksiPembayaran"]);
-        Route::get("/{a}",[TransaksiController::class,"detailTransaksiPembayaran"]);
+       
     });
-
-
+    Route::prefix("detail-transaksi")->group(function () {
+        Route::get("/{a}/{b}",[TransaksiController::class,"detailTransaksiPembayaran"]);
+    });
+    Route::prefix("konfirmasi/pembayaran")->group(function () {
+        Route::post("/",[TransaksiController::class,"konfirmasiPembayaran"]);
+    });
+    
+    Route::get("foto-pembayaran/{a}", [TransaksiController::class, "previewInvoice"])->where(
+        [
+            "a" => '[0-9]+'
+        ]
+    );
 
 });

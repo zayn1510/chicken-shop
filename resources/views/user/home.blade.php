@@ -16,7 +16,7 @@
     <nav>
         <div class="logo">PotongFresh</div>
         <div class="order-check">
-            <input type="text" placeholder="Cek Nomor Order">
+            <input type="text" placeholder="Cek Nomor Order" id="nomor_order" data-action="search-order">
             <button>Cek</button>
         </div>
         <ul>

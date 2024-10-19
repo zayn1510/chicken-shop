@@ -180,10 +180,12 @@
 
         /* Style untuk dropdown bank */
         .bank-dropdown {
-            display: none;
             /* Sembunyikan dropdown secara default */
             margin-top: 20px;
             text-align: center;
+        }
+        .hide{
+            display:none;
         }
     </style>
 </head>
@@ -202,20 +204,15 @@
 
         <div class="payment-methods">
             <h3>Pilih Metode Pembayaran</h3>
-            <select id="paymentMethod" onchange="updatePaymentOptions()">
-                <option value="none">-- Pilih Metode Pembayaran --</option>
-                <option value="transfer">Transfer Bank</option>
-                <option value="ewallet">E-Wallet (OVO, GoPay, DANA)</option>
-                <option value="cod">Cash On Delivery (COD)</option>
+            <select id="paymentMethod">
+                <option value="0">-- Pilih Metode Pembayaran --</option>
+
             </select>
 
-            <div class="bank-dropdown" id="bankDropdown">
+            <div class="bank-dropdown hide" id="bankDropdown">
                 <label for="bankList">Pilih Bank:</label>
                 <select id="bankList">
-                    <option value="bankA">Bank A</option>
-                    <option value="bankB">Bank B</option>
-                    <option value="bankC">Bank C</option>
-                    <option value="bankD">Bank D</option>
+                   
                 </select>
             </div>
         </div>

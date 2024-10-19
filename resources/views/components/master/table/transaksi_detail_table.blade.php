@@ -1,8 +1,8 @@
-<div class="product-stok hide font-12">
+<div class="detail-transaksi-table hide font-12">
     <div class="form-container">
         <div class="row">
             <div class="col-md-10">
-                <h3 class="font-14 bold">Kelola Stok Ayam</h3>
+                <h3 class="font-14 bold">Detail Transaksi</h3>
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-danger" data-action="kembali">Kembali</button>
@@ -10,14 +10,66 @@
         </div>
         <div class="row">
             <div class="col-md-12 mb-12">
+                <h4 class="poppins bold">Order</h4>
+                <table class="table poppins font-12" id="table-stok">
+                    <thead>
+                        <tr>
+                            <th>Nomor Order</th>
+                            <th>:</th>
+                            <td id="nomor_orders"></td>
+                        </tr>
+                        <tr>
+                            <th>Customers</th>
+                            <th>:</th>
+                            <td id="customers"></td>
+                        </tr>
+                        <tr>
+                            <th>Total</th>
+                            <th>:</th>
+                            <td id="total"></td>
+                        </tr>
+
+                        <tr>
+                            <th>Status</th>
+                            <th>:</th>
+                            <td id="status"></td>
+                        </tr>
+                        
+                    </thead>
+                </table>
+            </div>
+            <div class="col-md-12 mb-12">
+                <h4 class="poppins bold">Detail Order</h4>
                 <table class="table table-bordered poppins font-12" id="table-stok">
                     <thead>
                         <tr class="text-center">
                             <th>No</th>
-                            <th>Stok</th>
-                            <th>Aksi</th>
+                            <th>Ayam</th>
+                            <th>Jumlah</th>
+                            <th>Harga</th>
+                            <th>Total</th>
                         </tr>
                     </thead>
+                    <tbody id="tbodydetail">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12 mb-12">
+                <h4 class="poppins bold">Konfirmasi Pembayaran</h4>
+                <table class="table table-bordered poppins font-12" id="table-stok">
+                    <thead>
+                        <tr class="text-center">
+                            <th>No</th>
+                            <th>Metode</th>
+                            <th>Bank</th>
+                            <th>Foto Pembayaran</th>
+                            <th>Tanggal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodykonfirmasi">
+
+                    </tbody>
                 </table>
             </div>
         </div>

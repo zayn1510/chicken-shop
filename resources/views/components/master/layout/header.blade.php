@@ -133,6 +133,26 @@
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p class="poppins font-13">
+                                    Data Transaksi
+                                    <i class="right fas fa-angle-right mt-nav-5"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ url('dashboard/transaksi-pembayaran') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Pembayaran</p>
+                                    </a>
+                                </li>
+                            
+
+                            </ul>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-box"></i>
                                 <p class="poppins font-13">
                                     Riwayat Stok Ayam

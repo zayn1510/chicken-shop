@@ -28,6 +28,19 @@ class TransaksiPembayaran extends Model
         return $this->hasOne(OrderModel::class, "id", "order_id");
     }
 
+    public function metode()
+    {
+        return $this->hasOne(MetodeModels::class,"id","metode_id");
+    }
 
+    public function bank()
+    {
+        return $this->hasOne(BankModel::class,"id","bank_id");
+    }
+
+    public function konfirmasi_pembayaran()
+    {
+        return $this->hasMany(KonfirmasiPembayaranModel::class,"transaksi","id");
+    }
 
 }

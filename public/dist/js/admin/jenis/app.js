@@ -192,7 +192,8 @@ app.controller("homeController", ($scope, $http) => {
         const data = {
             jenis_ayam: parseInt(tempidjenis),
             jumlah: parseInt(document.getElementById("jumlah").value),
-            tanggal_masuk: document.getElementById('tglmsk').value
+            tanggal_masuk: document.getElementById('tglmsk').value,
+            jenis_stok: document.getElementById("jenis_stok").value
         };
         const jumlahInput = document.getElementById("jumlah");
         const tglmskInput = document.getElementById("tglmsk");
@@ -306,7 +307,7 @@ app.controller("homeController", ($scope, $http) => {
         })
     }
     const createTablePhoto = (data) => {
-       
+
         const tableFoto = document.getElementById("table-foto");
         let tbodyfoto = document.createElement("tbody");
         let existingTbody = tableFoto.getElementsByTagName("tbody")[0];

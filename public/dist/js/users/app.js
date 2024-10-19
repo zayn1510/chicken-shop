@@ -36,6 +36,12 @@ app.controller("homeController", ($scope, $http) => {
         return productCard;
     }
 
+    document.addEventListener("input", evt => {
+        const data_action = evt.target.getAttribute("data-action");
+        if (data_action === 'search-order') {
+            
+        }
+    });
     // Panggil fungsi untuk menambahkan elemen produk ke halaman
     createProductCard();
 

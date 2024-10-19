@@ -31,4 +31,9 @@ class OrderModel extends Model
     {
         return $this->belongsTo(TransaksiPembayaran::class);
     }
+
+    public function customers()
+    {
+        return $this->hasOne(CustomersModels::class, "userid", "user_id");
+    }
 }

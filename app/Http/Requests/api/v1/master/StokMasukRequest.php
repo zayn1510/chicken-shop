@@ -25,7 +25,8 @@ class StokMasukRequest extends FormRequest
         return [
             "jenis_ayam" => "required|integer",
             "tanggal_masuk" => "required|date",
-            "jumlah" => "required|integer"
+            "jumlah" => "required|integer",
+            "jenis_stok"=>"required|integer"
         ];
     }
 

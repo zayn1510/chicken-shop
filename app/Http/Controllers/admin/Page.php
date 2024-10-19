@@ -109,5 +109,21 @@ class Page extends Controller
         return view("user.regis_success");
     }
 
+    public function user_transaksi(string $nomorOrder,int $digit)
+    {
+        $data["nomor"] = $nomorOrder;
+        $data["digit"] = $digit;
+        
+        return view("user.transaksi", compact("data"));
+    }
+
+    public function admin_transaksi()
+    {
+        $data["title"] = "Transaksi Pembayaran";
+        $data["user"] = (object) [
+            "name" => "Admin"
+        ];
+        return view("components.master.template.transaksi_pembayaran",compact("data"));
+    }
 
 }

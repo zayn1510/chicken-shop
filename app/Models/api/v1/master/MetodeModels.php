@@ -18,4 +18,10 @@ class MetodeModels extends Model
         "nama_metode",
         "deskripsi"
     ];
+
+    public function transaksi_pembayarans()
+    {
+        return $this->belongsTo(TransaksiPembayaran::class);
+    }
+    
 }

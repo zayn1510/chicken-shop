@@ -9,13 +9,11 @@ app.controller("homeController", ($scope, $http) => {
     const prevPage = document.getElementById("prevPage");
     const nextPage = document.getElementById("nextPage");
     var toast = document.getElementById("toast");
-    let totalPagesTemp = 0;
-    var productorder = [];
 
+    var paymentSelect = document.getElementById("paymentMethod");
     const orderNow = document.getElementById("pesan-sekarang");
 
     const userid = localStorage.getItem("userid");
-
 
     if (!userid) {
         window.location.href = "login-user";
@@ -23,13 +21,45 @@ app.controller("homeController", ($scope, $http) => {
     orderNow.addEventListener("click", e => {
         const productData = getProductData();
         new AyamaService($http).orderProducts(productData, res => {
-            const { success } = res;
+            const { success, nomor, digit } = res;
             if (success) {
-                console.info(success);
+                window.location = "/user-transaksi/" + nomor + "/" + digit;
             }
         });
     });
 
+    const getDataBank = () => {
+        document.querySelector(".bank-dropdown").classList.remove("hide");
+        new AyamaService($http).getDataBank(pageSize, PageNumber, res => {
+            const { data } = res;
+            var bankSelect = document.getElementById("bankList");
+            for (var index = 0; index < data.length; index++) {
+                const optionPayment = document.createElement("option");
+                optionPayment.value = data[index].id;
+                optionPayment.text = data[index].nama_bank;
+                bankSelect.append(optionPayment);
+            }
+        })
+    }
+
+    const getDataMetode = () => {
+        new AyamaService($http).getDataMetode(pageSize, PageNumber, res => {
+            const { data } = res;
+
+            for (var index = 0; index < data.length; index++) {
+                const optionPayment = document.createElement("option");
+                optionPayment.value = data[index].id;
+                optionPayment.text = data[index].nama_metode;
+                paymentSelect.append(optionPayment);
+            }
+        })
+    }
+    paymentSelect.addEventListener("change", e => {
+        if (e.target.value == 1) {
+            getDataBank();
+        }
+    })
+    getDataMetode();
 
     const getProductData = () => {
         const productCards = document.querySelectorAll('.product-card');
@@ -56,7 +86,9 @@ app.controller("homeController", ($scope, $http) => {
             user_id: parseInt(userid),
             total: total,
             status: 1,
-            detail_orders: products
+            detail_orders: products,
+            bank: document.getElementById("bankList").value,
+            metode: document.getElementById("paymentMethod").value
         };
 
         return order;

@@ -34,7 +34,5 @@ class ProdukMediaController extends Controller
         return $this->produkFotoService->deletePhoto($id, $produkid);
     }
 
-    function previewPhoto(int $id):BinaryFileResponse{
-        return $this->produkFotoService->showPhoto($id);
-    }
+    
 }

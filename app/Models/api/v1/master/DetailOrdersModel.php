@@ -26,4 +26,9 @@ class DetailOrdersModel extends Model
     {
         return $this->belongsTo(OrderModel::class);
     }
+
+    public function ayam()
+    {
+        return $this->hasOne(JenisAyamModels::class,"id","ayam");
+    }
 }

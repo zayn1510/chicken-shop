@@ -3,7 +3,10 @@
 namespace App\Services\api;
 use App\Http\Requests\api\v1\master\OrderRequest;
 use App\Models\api\v1\master\DetailOrdersModel;
+use App\Models\api\v1\master\JenisAyamModels;
 use App\Models\api\v1\master\OrderModel;
+use App\Models\api\v1\master\StokModels;
+use App\Models\api\v1\master\TransaksiPembayaran;
 use Illuminate\Http\JsonResponse;
 use DB;
 class OrdersServices
@@ -24,6 +27,7 @@ class OrdersServices
                 ]
             );
             $detail_orders = [];
+            $stok_keluar = [];
             foreach ($orderRequest->detail_orders as $key => $value) {
                 $detail_orders[] = [
                     "order_id" => $order->id,
@@ -33,13 +37,35 @@ class OrdersServices
                     "created_at" => now(),
                     "updated_at" => now()
                 ];
+                $stok_keluar[] = [
+                    "jenis_ayam" => $value["ayam"],
+                    "jumlah" => $value["jumlah"],
+                    "tanggal_masuk" => now(),
+                    "jenis_stok" => 2,
+                    "created_at" => now(),
+                    "updated_at" => now()
+                ];
+
+                JenisAyamModels::where("id", $value["ayam"])->decrement('stok', $value["jumlah"]);
+
             }
+            StokModels::insert($stok_keluar);
             DetailOrdersModel::insert($detail_orders);
+            $transaksi = TransaksiPembayaran::create([
+                "order_id" => $order->id,
+                "bank_id" => $orderRequest->bank,
+                "metode_id" => $orderRequest->metode,
+                "total" => $orderRequest->total,
+                "status" => "pending"
+            ]);
+
             DB::commit();
             return response()->json(
                 [
                     "message" => "success",
-                    "success" => true
+                    "success" => true,
+                    "nomor" => $nomorOrder . "" . $transaksi->id,
+                    "digit"=>strlen($transaksi->id)
                 ]
             );
         } catch (\Throwable $th) {

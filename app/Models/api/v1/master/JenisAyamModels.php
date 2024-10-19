@@ -37,4 +37,9 @@ class JenisAyamModels extends Model
     {
         return $this->hasMany(MediaProdukModels::class,"produk_id");
     }
+
+    public function detail_order()
+    {
+        return $this->belongsTo(DetailOrdersModel::class);
+    }
 }

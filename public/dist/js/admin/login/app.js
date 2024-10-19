@@ -52,7 +52,7 @@ app.controller("homeController", ($scope, $http) => {
                         text: "Login Success",
                         icon: "success"
                     });
-                    window.location.href = "dashboard";
+                    window.location.href = "../dashboard";
                     return;
                 }
                 swal({
