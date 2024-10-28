@@ -6,6 +6,8 @@ body {
     background-color: #f8f8f8;
 }
 
+
+
 @font-face {
     font-family: myfont;
     src: url('../../fonts/Poppins-Regular.otf');
@@ -37,6 +39,7 @@ header.hero {
     justify-content: space-between;
     flex-direction: row;
     text-align: left;
+
 }
 
 .hero-text {
@@ -44,14 +47,14 @@ header.hero {
 }
 
 .container-chicken-shop {
-    background-color: transparent;
+    background-color:transparent;
     display: flex;
     align-items: center;
     padding: 10px;
     margin: auto;
 }
 
-.container-chicken-shop img {
+.container-chicken-shop img{
     width: 350px;
 }
 
@@ -69,6 +72,7 @@ header.hero {
 
 .hero a.btn-primary {
     background-color: #d32f2f;
+    /* Warna tombol */
     color: white;
     padding: 15px 25px;
     text-decoration: none;
@@ -78,12 +82,16 @@ header.hero {
 
 .hero a.btn-primary:hover {
     background-color: #b71c1c;
+    /* Warna saat hover */
 }
 
 .hero-image {
     width: 500px;
+   
     border-radius: 20px;
+
     margin-left: 30px;
+   
 }
 
 @media (max-width: 768px) {
@@ -96,17 +104,16 @@ header.hero {
         margin-left: 0;
         margin-top: 20px;
         width: 100%;
-        /* Agar gambar menyesuaikan lebar */
+
     }
 
     .hero h1 {
         font-size: 2.5em;
-        /* Mengurangi ukuran font untuk mobile */
+   
     }
 
     .hero p {
         font-size: 1.2em;
-        /* Mengurangi ukuran font untuk mobile */
     }
 }
 
@@ -114,25 +121,20 @@ header.hero {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-right: 10px;
-    /* Mengurangi margin di mobile */
-    flex-wrap: wrap;
-    /* Membuat elemen dapat membungkus */
+    margin-right: 130px;
 }
 
 .order-check input {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    width: 100%;
-    /* Menyesuaikan lebar di mobile */
-    max-width: 350px;
-    /* Batas maksimal lebar */
+    width: 350px;
     outline: none;
+
 }
 
 .order-check button {
-    padding: 10px 15px;
+    padding: 8px 15px;
     border: none;
     border-radius: 5px;
     background-color: #d32f2f;
@@ -188,6 +190,8 @@ nav ul li a:hover {
     border-radius: 50%;
 }
 
+
+
 section {
     padding: 60px 20px;
     text-align: center;
@@ -239,8 +243,6 @@ section p {
     margin: 2rem auto;
     display: flex;
     gap: 1rem;
-    flex-wrap: wrap;
-    /* Membuat elemen dapat membungkus */
 }
 
 .product-card {
@@ -249,8 +251,6 @@ section p {
     overflow: hidden;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    flex: 1 1 100%;
-    /* Menyesuaikan lebar produk untuk mobile */
 }
 
 .product-card:hover {
@@ -282,6 +282,7 @@ section p {
     font-weight: 700;
     margin-bottom: 10px;
     color: var(--text-color);
+  
 }
 
 .product-card__description {
@@ -346,25 +347,39 @@ section p {
         padding: 8px 16px;
         font-size: 0.8rem;
     }
+}
 
-    .features {
-        flex-direction: column;
-        align-items: center;
-    }
+.features {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
 
-    .feature {
-        flex: 1 1 80%;
-        margin: 20px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+.feature {
+    flex: 1 1 30%;
+    margin: 20px;
+    padding: 20px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-    .feature img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-    }
+.feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.feature h4 {
+    margin-bottom: 10px;
+    color: #d32f2f;
+}
+
+.feature img {
+    width: 50px;
+    /* Ukuran logo */
+    margin-bottom: 15px;
 }
 
 .testimonials {
@@ -381,31 +396,12 @@ section p {
     color: #555;
 }
 
-.testimonial-author {
-    margin-top: 10px;
-    font-weight: bold;
-    color: #333;
-}
-
-/* Penyesuaian footer */
 footer {
-    background-color: #6256CA;
+    background-color: #333;
     color: white;
     padding: 20px;
     text-align: center;
-    position: relative;
 }
-
-footer a {
-    color: white;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-
 
 .menu-toggle {
     display: none;
@@ -463,21 +459,109 @@ footer a:hover {
     }
 
     .features {
-        flex-direction: column;
+        display: flex; 
+        flex-direction: column; 
         align-items: center;
+        flex-wrap: nowrap; 
     }
-
+    
     .feature {
-        flex: 1 1 80%;
+        flex: 0 0 auto; 
         margin: 20px 0;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-
+    
     .feature img {
         width: 50px;
         height: 50px;
         object-fit: cover;
     }
+    .cont {
+        max-width: 900px;
+        margin: 2rem auto;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+     
+    }
+    
+    .product-card {
+        background-color: var(--card-background);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        flex: 1 1 100%;
+        /* Menyesuaikan lebar produk untuk mobile */
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .product-card__image {
+        height: 250px;
+        overflow: hidden;
+    }
+    
+    .product-card__image img {
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .product-card:hover .product-card__image img {
+        transform: scale(1.05);
+    }
+    
+    .product-card__info {
+        padding: 20px;
+    }
+    
+    .product-card__title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: var(--text-color);
+    }
+    
+    .product-card__description {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 20px;
+    }
+    
+    .product-card__price-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .product-card__price {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        text-align: center;
+        margin: auto;
+    }
+    
+    .product-card__btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .product-card__btn:hover {
+        background-color: #C71729;
+    }
+    
 }
