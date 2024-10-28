@@ -8,6 +8,7 @@ use App\Http\Controllers\api\v1\master\KeranjangController;
 use App\Http\Controllers\api\v1\master\MetodeController;
 use App\Http\Controllers\api\v1\master\OrderController;
 use App\Http\Controllers\api\v1\master\ProdukMediaController;
+use App\Http\Controllers\api\v1\master\ProfilController;
 use App\Http\Controllers\api\v1\master\StokMasukController;
 use App\Http\Controllers\api\v1\master\TransaksiController;
 use Illuminate\Http\Request;
@@ -92,7 +93,7 @@ Route::prefix("v1")->group(function () {
         Route::delete("{id}", [StokMasukController::class, "deleteData"]);
     });
     Route::prefix("stok_masuk_by")->group(function () {
-        Route::get("/{a}/{b}/{c}", [StokMasukController::class, "getDataByStokMasuk"]);
+        Route::get("/{a}/{b}/{c}/{d}", [StokMasukController::class, "getDataByStokMasuk"]);
     });
     Route::prefix("keranjang-user")->group(function () {
         Route::get("/{a}/{b}", [KeranjangController::class, "getKeranjang"]);
@@ -108,37 +109,55 @@ Route::prefix("v1")->group(function () {
     Route::prefix("bank")->group(function () {
         Route::get("/{a}/{b}", [BankController::class, "getBank"]);
         Route::post("/", [BankController::class, "addBank"]);
-        Route::put("/{a}",[BankController::class,"updateBank"]);
-        Route::delete("/{a}",[BankController::class,"deleteBank"]);
-        Route::get("/{a}",[BankController::class,"detailBank"]);
+        Route::put("/{a}", [BankController::class, "updateBank"]);
+        Route::delete("/{a}", [BankController::class, "deleteBank"]);
+        Route::get("/{a}", [BankController::class, "detailBank"]);
     });
 
     Route::prefix("metode")->group(function () {
         Route::get("/{a}/{b}", [MetodeController::class, "getMetode"]);
         Route::post("/", [MetodeController::class, "addMetode"]);
-        Route::put("/{a}",[MetodeController::class,"updateMetode"]);
-        Route::delete("/{a}",[MetodeController::class,"deleteMetode"]);
-        Route::get("/{a}",[MetodeController::class,"detailMetode"]);
+        Route::put("/{a}", [MetodeController::class, "updateMetode"]);
+        Route::delete("/{a}", [MetodeController::class, "deleteMetode"]);
+        Route::get("/{a}", [MetodeController::class, "detailMetode"]);
     });
 
     Route::prefix("transaksi-pembayaran")->group(function () {
         Route::get("/{a}/{b}", [TransaksiController::class, "getTransaksiPembayaran"]);
         Route::post("/", [TransaksiController::class, "addTransaksiPembayaran"]);
-        Route::put("/{a}",[TransaksiController::class,"updateTransaksiPembayaran"]);
-        Route::delete("/{a}",[TransaksiController::class,"deleteTransaksiPembayaran"]);
-       
+        Route::put("/{a}", [TransaksiController::class, "updateTransaksiPembayaran"]);
+        Route::delete("/{a}", [TransaksiController::class, "deleteTransaksiPembayaran"]);
+
     });
     Route::prefix("detail-transaksi")->group(function () {
-        Route::get("/{a}/{b}",[TransaksiController::class,"detailTransaksiPembayaran"]);
+        Route::get("/{a}/{b}", [TransaksiController::class, "detailTransaksiPembayaran"]);
     });
     Route::prefix("konfirmasi/pembayaran")->group(function () {
-        Route::post("/",[TransaksiController::class,"konfirmasiPembayaran"]);
+        Route::post("/", [TransaksiController::class, "konfirmasiPembayaran"]);
     });
-    
+
     Route::get("foto-pembayaran/{a}", [TransaksiController::class, "previewInvoice"])->where(
         [
             "a" => '[0-9]+'
         ]
     );
+
+    Route::get("update-konfirmasi-pembayaran/{a}/{b}", [TransaksiController::class, "updateKonfirmasiPembayaran"])->where(
+        [
+            "a" => '[0-9]+',
+            "b" => '[0-9]+',
+        ]
+    );
+
+    Route::get("update-status-transaksi/{a}/{b}", [TransaksiController::class, "updateStatusTransaksi"])->where(
+        [
+            "a" => '[0-9]+',
+            "b" => '[0-9]+',
+        ]
+    );
+
+    Route::post("update-profil-website", [ProfilController::class, "updateProfilWebsite"]);
+
+
 
 });

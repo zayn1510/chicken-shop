@@ -5,6 +5,20 @@ body {
     color: #333;
     background-color: #f8f8f8;
 }
+
+
+
+@font-face {
+    font-family: myfont;
+    src: url('../../fonts/Poppins-Regular.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.poppins {
+    font-family: myfont;
+}
+
 nav {
     background-color: #6256CA;
     padding: 15px;
@@ -18,18 +32,32 @@ nav {
 }
 
 header.hero {
-    background-color:#6256CA;
+    background-color: #6256CA;
     padding: 80px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-direction: row; /* Ganti dari column ke row */
-    text-align: left; /* Ganti menjadi kiri untuk tampilan lebih baik */
+    flex-direction: row;
+    text-align: left;
+
 }
 
 .hero-text {
-    max-width: 600px; /* Batasi lebar teks */
+    max-width: 600px;
 }
+
+.container-chicken-shop {
+    background-color:transparent;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin: auto;
+}
+
+.container-chicken-shop img{
+    width: 350px;
+}
+
 .hero h1 {
     font-size: 3em;
     margin-bottom: 20px;
@@ -43,7 +71,8 @@ header.hero {
 }
 
 .hero a.btn-primary {
-    background-color: #d32f2f; /* Warna tombol */
+    background-color: #d32f2f;
+    /* Warna tombol */
     color: white;
     padding: 15px 25px;
     text-decoration: none;
@@ -52,23 +81,29 @@ header.hero {
 }
 
 .hero a.btn-primary:hover {
-    background-color: #b71c1c; /* Warna saat hover */
+    background-color: #b71c1c;
+    /* Warna saat hover */
 }
 
 .hero-image {
-    width: 500px; /* Ukuran gambar */
+    width: 500px;
+    /* Ukuran gambar */
     border-radius: 20px;
-   
-    margin-left: 30px; /* Tambah jarak dengan teks */
+
+    margin-left: 30px;
+    /* Tambah jarak dengan teks */
 }
 
 @media (max-width: 768px) {
     header.hero {
-        flex-direction: column; /* Susun kolom di layar kecil */
+        flex-direction: column;
+        /* Susun kolom di layar kecil */
         text-align: center;
     }
+
     .hero-image {
-        margin-left: 0; /* Hilangkan margin di layar kecil */
+        margin-left: 0;
+        /* Hilangkan margin di layar kecil */
         margin-top: 20px;
     }
 }
@@ -81,18 +116,19 @@ header.hero {
 }
 
 .order-check input {
-    padding: 8px;
+    padding: 10px;
     border: none;
     border-radius: 5px;
-    width: 200px;
+    width: 350px;
     outline: none;
+
 }
 
 .order-check button {
     padding: 8px 15px;
     border: none;
     border-radius: 5px;
-    background-color: #b71c1c;
+    background-color: #d32f2f;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -132,7 +168,8 @@ nav ul li a:hover {
 }
 
 .cart-icon::after {
-    content: "2"; /* Ini hanya contoh jumlah item di keranjang */
+    content: "2";
+    /* Ini hanya contoh jumlah item di keranjang */
     position: absolute;
     top: -8px;
     right: -10px;
@@ -155,7 +192,8 @@ section {
 section h2 {
     font-size: 2.5em;
     margin-bottom: 20px;
-    color: #d32f2f; /* Warna judul */
+    color: #d32f2f;
+    /* Warna judul */
 }
 
 section p {
@@ -191,35 +229,115 @@ section p {
     margin-top: 20px;
 }
 
-.product-cards {
+.cont {
+    max-width: 900px;
+    margin: 2rem auto;
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 30px;
+    gap: 1rem;
 }
 
 .product-card {
-    background: #f0f0f0;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-    padding: 20px;
-    text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
-    width: 250px; /* Lebar kartu */
+    background-color: var(--card-background);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
-.product-card img {
-    width: 200px; /* Lebar gambar tetap */
-    height: 200px; /* Tinggi gambar tetap */
-    object-fit: cover; /* Memastikan gambar tetap dalam proporsi yang benar */
-    border-radius: 10px;
+.product-card__image {
+    height: 250px;
+    overflow: hidden;
+}
+
+.product-card__image img {
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-card__image img {
+    transform: scale(1.05);
+}
+
+.product-card__info {
+    padding: 20px;
+}
+
+.product-card__title {
+    font-size: 1.5rem;
+    font-weight: 700;
     margin-bottom: 10px;
+    color: var(--text-color);
+  
+}
+
+.product-card__description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.product-card__price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-card__price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: center;
+    margin: auto;
+}
+
+.product-card__btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.product-card__btn:hover {
+    background-color: #C71729;
+}
+
+@media (max-width: 480px) {
+    .cont {
+        max-width: 100%;
+        padding: 0 20px;
+    }
+
+    .product-card__image {
+        height: 200px;
+    }
+
+    .product-card__title {
+        font-size: 1.3rem;
+    }
+
+    .product-card__description {
+        font-size: 0.8rem;
+    }
+
+    .product-card__price {
+        font-size: 1.1rem;
+    }
+
+    .product-card__btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
 }
 
 .features {
@@ -250,7 +368,8 @@ section p {
 }
 
 .feature img {
-    width: 50px; /* Ukuran logo */
+    width: 50px;
+    /* Ukuran logo */
     margin-bottom: 15px;
 }
 
@@ -273,68 +392,4 @@ footer {
     color: white;
     padding: 20px;
     text-align: center;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-}
-
-.transaction-flow {
-    display: flex;
-    align-items: center;
-}
-
-.step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #ccc;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    font-weight: bold;
-    font-size: 16px;
-}
-
-.completed .circle {
-    background-color: #4caf50; /* Green for completed */
-}
-
-.in-progress .circle {
-    background-color: #ff9800; /* Orange for in-progress */
-}
-
-.connector {
-    width: 60px;
-    height: 3px;
-    background-color: #ccc;
-    margin: 0 10px;
-}
-
-.completed + .connector {
-    background-color: #4caf50; /* Connector green when completed */
-}
-
-.in-progress + .connector {
-    background-color: #ff9800; /* Connector orange when in-progress */
-}
-
-p {
-    margin: 0;
-    font-size: 14px;
-    color: #333;
 }

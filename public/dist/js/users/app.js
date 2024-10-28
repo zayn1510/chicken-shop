@@ -12,34 +12,52 @@ app.controller("homeController", ($scope, $http) => {
     let totalPagesTemp = 0;
 
 
-    const createProductCard = (url, caption, harga, id) => {
-        var productCard = document.createElement('div');
-        productCard.className = 'product-card';
+    const createProductCard = (url, caption, harga, id, desc) => {
+        const productCard = document.createElement("div");
+        productCard.className = "product-card";
 
-        const urlbase = window.location.origin + "/produk/" + id + "/" + url;
+        const imageContainer = document.createElement("div");
+        imageContainer.className = "product-card__image";
+        const img = document.createElement("img");
+        img.src = window.location.href + "produk/" + id + "/" + url;
+        img.alt = caption;
+        imageContainer.appendChild(img);
 
-        const img = document.createElement('img');
-        img.src = urlbase;
-        img.alt = caption
+        const infoContainer = document.createElement("div");
+        infoContainer.className = "product-card__info";
+        const title = document.createElement("h2");
+        title.className = "product-card__title";
+        title.textContent = caption;
+        const description = document.createElement("p");
+        description.className = "product-card__description";
+      
+        description.textContent = desc;
 
-        const title = document.createElement('h4');
-        title.textContent = caption
+        const priceRow = document.createElement("div");
+        priceRow.className = "product-card__price-row";
+        const price = document.createElement("span");
 
-        // Membuat elemen p untuk harga
-        const price = document.createElement('p');
-        price.textContent = harga;
+        const formattedPrice = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+        }).format(harga);
+        price.className = "product-card__price";
+        price.textContent = formattedPrice;
 
-        // Menambahkan img, h4, dan p ke dalam div utama
-        productCard.appendChild(img);
-        productCard.appendChild(title);
-        productCard.appendChild(price);
+        priceRow.appendChild(price);
+        infoContainer.appendChild(title);
+        infoContainer.appendChild(description);
+        infoContainer.appendChild(priceRow);
+        productCard.appendChild(imageContainer);
+        productCard.appendChild(infoContainer);
+
         return productCard;
     }
 
     document.addEventListener("input", evt => {
         const data_action = evt.target.getAttribute("data-action");
         if (data_action === 'search-order') {
-            
+
         }
     });
     // Panggil fungsi untuk menambahkan elemen produk ke halaman
@@ -48,9 +66,15 @@ app.controller("homeController", ($scope, $http) => {
     const getDataAyam = () => {
         new AyamaService($http).getDataAyam(pageSize, PageNumber, res => {
             const { data } = res;
-            const elementProduk = document.querySelector(".product-cards");
+            const elementProduk = document.querySelector(".cont");
             for (var index = 0; index < data.length; index++) {
-                const productCard = createProductCard(data[index].produk_media[0].media_url, data[index].jenis, data[index].harga, data[index].id);
+                let str=data[index].keterangan;
+                if(str.length>50){
+                    str=str.substring(0, 50) + '...';
+                }
+                console.info(str);
+                const productCard = createProductCard(data[index].produk_media[0].media_url, data[index].jenis, data[index].harga,
+                     data[index].id, str);
                 elementProduk.append(productCard);
             }
         });

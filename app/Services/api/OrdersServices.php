@@ -56,7 +56,7 @@ class OrdersServices
                 "bank_id" => $orderRequest->bank,
                 "metode_id" => $orderRequest->metode,
                 "total" => $orderRequest->total,
-                "status" => "pending"
+                "status" => 1
             ]);
 
             DB::commit();
@@ -73,7 +73,7 @@ class OrdersServices
 
             return response()->json(
                 [
-                    "message" => "error in server",
+                    "message" => "error in server ".$th->getMessage(),
                     "success" => false,
                 ]
             );

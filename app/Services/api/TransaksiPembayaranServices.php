@@ -6,13 +6,13 @@ use App\Models\api\v1\master\KonfirmasiPembayaranModel;
 use App\Models\api\v1\master\TransaksiPembayaran;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
+use DB;
 class TransaksiPembayaranServices
 {
     function get_data(int $itempage, int $startPage): JsonResponse
     {
         try {
-            $data = TransaksiPembayaran::with(['metode', 'bank', 'orders.order_details',"orders.customers"])->paginate($itempage, ["*"], "page", $startPage);
+            $data = TransaksiPembayaran::with(['metode', 'bank', 'orders.order_details', "orders.customers"])->paginate($itempage, ["*"], "page", $startPage);
 
             return response()->json(
                 [
@@ -38,11 +38,11 @@ class TransaksiPembayaranServices
     }
 
 
-    function detail_transaksi(string $nomor,int $digit): JsonResponse
+    function detail_transaksi(string $nomor, int $digit): JsonResponse
     {
         try {
             $id = substr($nomor, -$digit);
-            $data = TransaksiPembayaran::with(['metode', 'bank', 'orders.order_details.ayam',"orders.customers","konfirmasi_pembayaran"])->
+            $data = TransaksiPembayaran::with(['metode', 'bank', 'orders.order_details.ayam', "orders.customers", "konfirmasi_pembayaran"])->
                 where("id", $id)->first();
             return response()->json(
                 [
@@ -115,25 +115,23 @@ class TransaksiPembayaranServices
         );
     }
 
-    function konfirmasi_pembayaran(KonfirmasiPembayaran $konfirmasiPembayaran):JsonResponse
+    function konfirmasi_pembayaran(KonfirmasiPembayaran $konfirmasiPembayaran): JsonResponse
     {
         try {
 
+            DB::beginTransaction();
             if (!empty($konfirmasiPembayaran->file("foto"))) {
                 $photo = $konfirmasiPembayaran->file("foto");
                 $photodb = time() . '.' . $photo->getClientOriginalExtension();
                 $directoryPath = 'transaksi/' . $konfirmasiPembayaran->transaksi;
                 $photo->move(($directoryPath), $photodb);
-
-                $update = KonfirmasiPembayaranModel::where("id", $konfirmasiPembayaran->idfoto)->first();
-
                 KonfirmasiPembayaranModel::create([
                     'transaksi' => $konfirmasiPembayaran->transaksi,
                     'foto_pembayaran' => $photodb,
                     'status' => $konfirmasiPembayaran->status,
                 ]);
-
             }
+            DB::commit();
             return response()->json(
                 [
                     "message" => "Success",
@@ -141,8 +139,8 @@ class TransaksiPembayaranServices
                 ]
             );
 
-
         } catch (\Throwable $th) {
+            DB::rollBack();
             return response()->json(
                 [
                     "message" => "Failed " . $th->getMessage(),
@@ -151,11 +149,11 @@ class TransaksiPembayaranServices
             );
         }
     }
-    public function showKonfirmasiPembayaran(int $id):BinaryFileResponse
+    public function showKonfirmasiPembayaran(int $id): BinaryFileResponse
     {
         $photo = KonfirmasiPembayaranModel::find($id);
 
-        
+
         if (!$photo) {
             abort("404", "Data not found");
         }
@@ -168,6 +166,39 @@ class TransaksiPembayaranServices
         }
         return response()->file($path);
     }
-    
 
+    public function update_konfirmasi_pembayaran(int $id, int $status): JsonResponse
+    {
+        $update = KonfirmasiPembayaranModel::where("id", $id)->first();
+        if ($update) {
+            $update->status = $status;
+            $update->save();
+            return response()->json([
+                "message" => "success",
+                "success" => true
+            ]);
+        }
+        return response()->json([
+            "message" => "failed",
+            "success" => false
+        ]);
+
+    }
+
+    public function update_status_transaksi(int $transaksi,int $status):JsonResponse
+    {
+        $update = TransaksiPembayaran::where("id", $transaksi)->first();
+        if($update){
+            $update->status = $status;
+            $update->save();
+            return response()->json([
+                "message" => "success",
+                "success" => true
+            ]);
+        }
+        return response()->json([
+            "message" => "failed",
+            "success" => false
+        ]);
+    }
 }

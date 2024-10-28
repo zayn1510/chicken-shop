@@ -39,9 +39,7 @@ app.controller("homeController", ($scope, $http) => {
                     text: "Foto Pembayaran telah terkirim !",
                     icon: "success"
                 });
-                $('#modalFoto').modal('hide');
-                getDataPhoto(tempidproduk);
-                resetUploadFoto();
+                location.reload();
             } else {
                 swal({
                     text: "Format foto pembayaran tidak sesuai !",
@@ -73,24 +71,41 @@ app.controller("homeController", ($scope, $http) => {
     const getDetailTransaksiPembayaran = () => {
         const nomor = document.getElementById("nomor_order");
         const digit = document.getElementById("digit")
-        let flow=document.querySelectorAll(".step");
+        let flow = document.querySelectorAll(".step");
         new AyamaService($http).getDataTransaksi(nomor.value, digit.value, res => {
             const { data } = res;
             document.getElementById("nomor_transaksi").textContent = nomor.value;
-            document.getElementById("status").textContent = data.status;
+            const status = ["", "Menunggu", "Sedang Di Proses", "Pengiriman", "Selesai"];
+            document.getElementById("status").textContent = status[data.status];
             const date = new Date(data.created_at);
             const detail_orders = data.orders.order_details;
             idtransaksi = data.id;
-            const konfirmasi_pembayaran=data.konfirmasi_pembayaran;
-            if(konfirmasi_pembayaran){
-               flow[1].classList.add("in-progress"); 
-               document.querySelector(".payment-summary").classList.add("hide");
-               document.querySelector(".upload-section").classList.add('hide');
-               const status_pembayaran=document.createElement("p");
-               if (konfirmasi_pembayaran.status===1) {
-                status_pembayaran.textContent="Pembayaran Sedang Di Proses";
-               }
-               document.querySelector(".status_pembayaran").append(status_pembayaran);
+            const konfirmasi_pembayaran = data.konfirmasi_pembayaran;
+            const metode = data.metode;
+            if (konfirmasi_pembayaran.length > 0) {
+                const dataTerakhir = konfirmasi_pembayaran.sort((a, b) => a.id - b.id).pop();
+
+                document.querySelector(".payment-summary").classList.add("hide");
+                document.querySelector(".upload-section").classList.add('hide');
+                const status_pembayaran = document.createElement("p");
+                console.info(data.status);
+                if (dataTerakhir.status === 1 && data.status == 1) {
+                    flow[1].classList.add("in-progress");
+                    status_pembayaran.textContent = "Pembayaran Sedang Di Proses";
+                } else if (dataTerakhir.status == 2 && data.status == 2) {
+                    flow[1].classList.add("completed");
+                    status_pembayaran.textContent = "Pembayaran sudah diterima";
+                } else if (dataTerakhir.status == 2 && data.status == 3) {
+                    flow[1].classList.add("completed");
+                    flow[2].classList.add("in-progress");
+                    status_pembayaran.textContent = "Pengiriman ayam potong sedang diproses";
+                } else if (dataTerakhir.status == 2 && data.status == 4) {
+                    flow[1].classList.add("completed");
+                    flow[2].classList.add("completed");
+                    flow[3].classList.add("completed");
+                    status_pembayaran.textContent = "Pengiriman ayam potong selesai";
+                }
+                document.querySelector(".status_pembayaran").append(status_pembayaran);
             }
 
             const newday = date.setDate(date.getDate() + 1);
@@ -105,7 +120,7 @@ app.controller("homeController", ($scope, $http) => {
                 const item = createTransaksiItem(row.ayam.jenis, row.harga, row.jumlah);
                 document.querySelector(".transaction-list").append(item);
             }
-            // Mengatur format tanggal dengan zona waktu tertentu
+
             const options = {
                 weekday: 'long',
                 day: '2-digit',
@@ -122,30 +137,35 @@ app.controller("homeController", ($scope, $http) => {
             const hoursSpan = document.getElementById('hours');
             const minutesSpan = document.getElementById('minutes');
 
-            const updateCountdown = () => {
-                // Hitung selisih waktu dalam detik
-                const now = new Date();
-                const totalSeconds = Math.floor((newday - now) / 1000);
+            if (metode.id == 1) {
+                const updateCountdown = () => {
+                    const now = new Date();
+                    const totalSeconds = Math.floor((newday - now) / 1000);
+                    if (totalSeconds <= 0) {
+                        hoursSpan.innerText = "00";
+                        minutesSpan.innerText = "00";
+                        clearInterval(interval);
+                        return;
+                    }
 
-                // Jika waktu sudah habis, berhenti dan tampilkan pesan
-                if (totalSeconds <= 0) {
-                    hoursSpan.innerText = "00";
-                    minutesSpan.innerText = "00";
-                    clearInterval(interval); // Hentikan interval saat selesai
-                    return;
-                }
+                    const hours = Math.floor(totalSeconds / 3600);
+                    const minutes = Math.floor((totalSeconds % 3600) / 60);
 
-                // Hitung menit dan detik
-                const hours = Math.floor(totalSeconds / 3600);
-                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                    hoursSpan.innerText = String(hours).padStart(2, '0');
+                    minutesSpan.innerText = String(minutes).padStart(2, '0');
+                };
 
-                // Tampilkan menit dan detik dengan format dua digit
-                hoursSpan.innerText = String(hours).padStart(2, '0');
-                minutesSpan.innerText = String(minutes).padStart(2, '0');
-            };
+                const interval = setInterval(updateCountdown, 1000);
+            } else {
+                document.querySelector(".payment-summary").classList.add("hide");
+                document.querySelector(".upload-section").classList.add("hide");
+                document.querySelectorAll(".step")[1].remove();
+                document.querySelectorAll(".connector")[1].remove();
+                document.querySelectorAll(".step")[1].querySelector(".circle").textContent = 2;
+                document.querySelectorAll(".step")[2].querySelector(".circle").textContent = 3;
+                document.querySelector(".status_pembayaran").classList.add("hide");
+            }
 
-            // Perbarui countdown setiap detik
-            const interval = setInterval(updateCountdown, 1000);
         });
     }
 

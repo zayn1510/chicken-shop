@@ -1,4 +1,4 @@
-<x-master.layout.header :title="$data['title']" :user="$data['user']" />
+<x-master.layout.header :title="$data['title']" :user="$data['user']"  :website="$data['website']"/>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -35,12 +35,6 @@
                                 <div class="row">
                                     <div class="col-md-10">
                                         <h5 class="font-13 bold">Data {{ $data["title"] }}</h5>
-                                    </div>
-
-                                    <div class="col-md-2 pull-right">
-                                        <button class="btn btn-primary poppins" id="open-form" data-action="open-form"
-                                            data-toggle="modal" data-target="#jenisModal">Tambah
-                                            Data</button>
                                     </div>
                                 </div>
                             </div>

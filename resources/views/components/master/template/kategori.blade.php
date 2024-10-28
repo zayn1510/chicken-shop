@@ -1,4 +1,4 @@
-<x-master.layout.header :title="$data['title']" :user="$data['user']" />
+<x-master.layout.header :title="$data['title']" :user="$data['user']" :website="$data['website']"/>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->

@@ -220,7 +220,7 @@
         <button class="btn-order" id="pesan-sekarang">Pesan Sekarang</button>
 
         <div class="back-link">
-            <a href="#">Kembali ke Beranda</a>
+            <a href="{{url("/")}}">Kembali ke Beranda</a>
         </div>
     </section>
 

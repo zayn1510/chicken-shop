@@ -36,7 +36,9 @@
 .error {
     border: 1px solid red;
 }
-
+.color-red{
+    color: red;
+}
 
 .item-center {
     text-align: center;

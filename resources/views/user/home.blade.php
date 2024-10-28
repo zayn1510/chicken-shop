@@ -7,6 +7,7 @@
     <title>PotongFresh - Ayam Potong Segar</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link href="{{ asset('dist/css/user.css') }}" rel="stylesheet" />
+    <link rel="icon" href="{{ $data["website"]->urllogo }}" type="image/png">
     <style>
 
     </style>
@@ -14,7 +15,7 @@
 
 <body ng-app="homeApp" class="hold-transition sidebar-mini" ng-controller="homeController">
     <nav>
-        <div class="logo">PotongFresh</div>
+        <div class="logo">{{ $data["website"]->name }}</div>
         <div class="order-check">
             <input type="text" placeholder="Cek Nomor Order" id="nomor_order" data-action="search-order">
             <button>Cek</button>
@@ -28,16 +29,17 @@
 
         </ul>
     </nav>
-
     <header class="hero">
+       <div class="container-chicken-shop">
         <div class="hero-content">
-            <h1>PotongFresh</h1>
+            <h1>Ayam Potong Fresh<br>Masak Jadi Lebih Mudah!</h1>
             <p>Ayam Potong Segar Langsung dari Peternakan ke Pintu Anda</p>
             <a href="pesan" class="btn-primary">Pesan Sekarang</a>
         </div>
-        <img src="{{asset('dist/img/ayam_.png')}}" alt="Fresh Chicken" class="hero-image">
+        <img src="{{ $data["website"]->urlimage }}" alt="Fresh Chicken" class="hero-image">
+       </div>
     </header>
-    
+
 
     <section id="promo">
         <h2>Promo Spesial Minggu Ini!</h2>
@@ -46,8 +48,10 @@
 
         <div class="promo-details">
             <h3>Produk Kami</h3>
-            <div class="product-cards">
+            <div class="cont">
+                
             </div>
+            
         </div>
 
     </section>
@@ -59,7 +63,7 @@
 
         <div class="features">
             <div class="feature">
-                <img src="https://img.icons8.com/ios-filled/50/000000/quality.png" alt="Kualitas">
+                <img src="{{asset("assets/support.png")}}" alt="Kualitas">
                 <h4>Kualitas Terbaik</h4>
                 <p>Ayam kami berasal dari peternakan yang terjamin kualitas dan kesehatannya.</p>
             </div>
@@ -92,7 +96,7 @@
     <script>
         var API = "{{ env('API_URL') }}";
         var API_SERVICE = "{{ env('API_SERVICE') }}";
-      
+
         var accessToken = "{{ session('token') }} ";
     </script>
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>

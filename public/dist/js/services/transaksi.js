@@ -15,6 +15,31 @@ class TransaksiiService {
                 callback(err);
             })
     }
+    updateStatusFotoPembayaran(a, b, callback) {
+        this.http({
+            url: `${API_SERVICE}update-konfirmasi-pembayaran/` + a + "/" + b,
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }).then(e => callback(e.data))
+            .catch(err => {
+                callback(err);
+            })
+    }
+
+    updateStatusTransaksi(a, b, callback) {
+        this.http({
+            url: `${API_SERVICE}update-status-transaksi/` + a + "/" + b,
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }).then(e => callback(e.data))
+            .catch(err => {
+                callback(err);
+            })
+    }
 
     detailDataTransaksi(a,b,callback) {
         this.http({

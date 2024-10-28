@@ -24,14 +24,23 @@ app.controller("homeController", ($scope, $http) => {
 
 
     const getDataStokMasuk = () => {
-        new StokService($http).getDataStokBy(pageSize, PageNumber, 0, res => {
+        new StokService($http).getDataStokBy(pageSize, PageNumber, 0, 1, res => {
             const { data, totalPages } = res;
             totalPagesTemp = totalPages;
             initData(data, totalPages);
         });
     }
 
+    const getDataStokKeluar = () => {
+        new StokService($http).getDataStokBy(pageSize, PageNumber, 0, 2, res => {
+            const { data, totalPages } = res;
+            totalPagesTemp = totalPages;
+            initDataKeluar(data, totalPages);
+        });
+    }
+
     getDataStokMasuk();
+    getDataStokKeluar();
     const createSkeletonRow = (rows) => {
         const row = document.createElement("tr");
         row.classList.add("skeleton-row");
@@ -106,10 +115,63 @@ app.controller("homeController", ($scope, $http) => {
               <td>${row.jumlah}</td>
               <td>${row.tanggal_masuk}</td>
             </tr > `);
-          
+
         }, 1000)
 
     }
+
+    const setSkeltonRowKeluar = (data) => {
+        const tbody = document.querySelectorAll("tbody")[1];
+        tbody.innerHTML = "";
+        const numRowsToDisplay = Math.min(data.length, 10);
+
+
+        for (let i = 0; i < numRowsToDisplay; i++) {
+            const skeletonRow = createSkeletonRow(10);
+            tbody.appendChild(skeletonRow);
+        }
+
+        setTimeout(() => {
+            tbody.innerHTML = "";
+            tbody.innerHTML = data.map((row, index) => `
+            <tr class='text-center'>
+              <td>${index + 1}</td>
+              <td>${row.jenis}</td>
+              <td>${row.jumlah}</td>
+              <td>${row.tanggal_masuk}</td>
+            </tr > `);
+
+        }, 1000)
+
+    }
+    const initDataKeluar = (data, totalPages) => {
+        setSkeltonRowKeluar(data);
+        lib.initPagination(totalPages, null);
+        const newPageSize = pageSize + 1;
+        if (pageSize == 0) {
+            prevPage.setAttribute("disabled", true);
+        }
+        if (newPageSize == totalPages) {
+            nextPage.setAttribute("disabled", true);
+        } else {
+            nextPage.removeAttribute("disabled");
+        }
+
+        const elementPageNumber = document.querySelectorAll(".page-number");
+        if (elementPageNumber) {
+            elementPageNumber.forEach(element => {
+                element.addEventListener("click", evt => {
+                    const txtelement = evt.target.textContent;
+                    PageNumber = txtelement - 1
+                    nextPage.disabled = (PageNumber + 1 === totalPagesTemp);
+                    document.querySelector(".active-pagination").classList.remove("active-pagination");
+                    document.getElementsByClassName("page-number")[PageNumber].classList.add("active-pagination");
+                    prevPage.disabled = (PageNumber === 0);
+                    getDataByPagination();
+                });
+            });
+        }
+    };
     const initData = (data, totalPages) => {
         setSkeltonRow(data);
         lib.initPagination(totalPages, null);

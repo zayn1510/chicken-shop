@@ -7,6 +7,7 @@
                         <th>No</th>
                         <th>Ayam</th>
                         <th>Stok</th>
+                        <th>Tanggal Masuk</th>
                     </tr>
                 </thead>
                 <tbody>

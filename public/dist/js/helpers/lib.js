@@ -27,3 +27,21 @@ export const initPagination = (totalPages, a) => {
     }
     return pageElement;
 }
+
+export const formatRupiah = (number) => {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR'
+    }).format(number);
+}
+export const formatDate = (date) => {
+    const format = new Date(date);
+    const options = {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'Asia/Jakarta'
+    };
+    return format.toLocaleString('id-ID', options);
+}

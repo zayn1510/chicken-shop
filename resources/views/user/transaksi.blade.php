@@ -402,24 +402,25 @@
             <div class="transaction-flow">
                 <div class="step completed">
                     <div class="circle">1</div>
-                    <p>Order Placed</p>
+                    <p>Pesanan Dibuat</p>
                 </div>
                 <div class="connector"></div>
                 <div class="step">
                     <div class="circle">2</div>
-                    <p>Payment Confirmed</p>
+                    <p>Pembayaran Dikonfirmasi</p>
                 </div>
                 <div class="connector"></div>
                 <div class="step">
                     <div class="circle">3</div>
-                    <p>Shipped</p>
+                    <p>Dikirim</p>
                 </div>
                 <div class="connector"></div>
                 <div class="step">
                     <div class="circle">4</div>
-                    <p>Delivered</p>
+                    <p>Terkirim</p>
                 </div>
             </div>
+            
             <div class="receipt-header">
 
                 <h2>PT. PotongFresh</h2>
@@ -474,7 +475,7 @@
         </div>
 
         <div class="back-link">
-            <a href="index.html">Kembali ke Beranda</a>
+            <a href="{{url("/")}}">Kembali ke Beranda</a>
         </div>
     </section>
     <script>

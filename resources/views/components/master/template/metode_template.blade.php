@@ -1,6 +1,6 @@
 <div>
     <!-- Walk as if you are kissing the Earth with your feet. - Thich Nhat Hanh -->
-</div><x-master.layout.header :title="$data['title']" :user="$data['user']" />
+</div><x-master.layout.header :title="$data['title']" :user="$data['user']" :website="$data['website']"/>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->

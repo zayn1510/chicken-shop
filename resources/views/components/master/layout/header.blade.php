@@ -58,13 +58,13 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index.html" class="brand-link">
-                <img src="{{ asset('icon.png') }}" class="img-responsive img-logo" alt="User Image">
+
             </a>
 
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user (optional) -->
-                <p class="title-admin poppins">Administrasi Pasipa</p>
+                <p class="title-admin poppins">{{ $website->name }}</p>
 
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
@@ -146,11 +146,11 @@
                                         <p class="poppins font-13">Pembayaran</p>
                                     </a>
                                 </li>
-                            
+
 
                             </ul>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-box"></i>
@@ -168,23 +168,42 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/dashboard/pemenang') }}" class="nav-link">
+                                    <a href="{{ url('dashboard/stok/keluar') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p class="poppins font-13">Keluar</p>
                                     </a>
                                 </li>
+                            </ul>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p class="poppins font-13">
+                                    Pengaturan
+                                    <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="{{ url('dashboard/akun') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Akun</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('dashboard/website') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Website</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                     </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('admin/dashboard/akun') }}" class="nav-link">
-                            <i class="nav-icon fas fa-user"></i>
-                            <p class="poppins font-13">
-                                Akun
-                                <i class=""></i>
-                            </p>
-                        </a>
-                    </li>
+
+
 
 
                 </nav>

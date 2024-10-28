@@ -38,9 +38,9 @@ class TransaksiController extends Controller
     {
         return $this->transaksiPembayaranServices->delete_data($id);
     }
-    function detailTransaksiPembayaran(string $nomor,int $digit): JsonResponse
+    function detailTransaksiPembayaran(string $nomor, int $digit): JsonResponse
     {
-        return $this->transaksiPembayaranServices->detail_transaksi($nomor,$digit);
+        return $this->transaksiPembayaranServices->detail_transaksi($nomor, $digit);
     }
 
     function konfirmasiPembayaran(KonfirmasiPembayaran $konfirmasiPembayaran): JsonResponse
@@ -48,7 +48,18 @@ class TransaksiController extends Controller
         return $this->transaksiPembayaranServices->konfirmasi_pembayaran($konfirmasiPembayaran);
     }
 
-    function previewInvoice(int $id):BinaryFileResponse{
+    function previewInvoice(int $id): BinaryFileResponse
+    {
         return $this->transaksiPembayaranServices->showKonfirmasiPembayaran($id);
+    }
+
+    function updateKonfirmasiPembayaran(int $id, int $status): JsonResponse
+    {
+        return $this->transaksiPembayaranServices->update_konfirmasi_pembayaran($id, $status);
+    }
+
+    function updateStatusTransaksi(int $id, int $status): JsonResponse
+    {
+        return $this->transaksiPembayaranServices->update_status_transaksi($id, $status);
     }
 }

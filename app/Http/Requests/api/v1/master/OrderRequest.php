@@ -30,7 +30,7 @@ class OrderRequest extends FormRequest
             "detail_orders.*.ayam"=>"required|integer",
             "detail_orders.*.jumlah"=>"required|integer",
             "detail_orders.*.harga"=>"required",
-            "bank"=>"required|integer",
+            "bank"=>"integer",
             "metode"=>"required|integer"
         ];
     }

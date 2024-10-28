@@ -17,10 +17,10 @@ app.controller("homeController", ($scope, $http) => {
     const price = document.getElementById("harga");
     var toast = document.getElementById("toast");
     let totalPagesTemp = 0;
-    let aksi = 0;
-    var tempidproduk = 0;
-    let add = true;
-    let tempidjenis = 0;
+    var idkonfirmasi = 0;
+    var digit = 0;
+    var nomor = 0;
+    var transaksi = 0;
 
 
     const getDataTransaksi = () => {
@@ -63,13 +63,11 @@ app.controller("homeController", ($scope, $http) => {
 
     });
 
-    const setFotoPembayaran = (data,metode,bank) => {
+    const setFotoPembayaran = (data, metode, bank) => {
 
         const tbody = document.getElementById("tbodykonfirmasi");
         tbody.innerHTML = "";
         const numRowsToDisplay = Math.min(data.length, 10);
-
-
         for (let i = 0; i < numRowsToDisplay; i++) {
             const skeletonRow = createSkeletonRow(10);
             tbody.appendChild(skeletonRow);
@@ -82,7 +80,7 @@ app.controller("homeController", ($scope, $http) => {
             year: 'numeric',
             timeZone: 'Asia/Jakarta'
         };
-        const status = ["", "menunggu", "proses", "pengantaran", "selesai"];
+        const status = ["", "nenunggu", "diterima", "dibayar"];
         setTimeout(() => {
             tbody.innerHTML = "";
             tbody.innerHTML = data.map((row, index) =>
@@ -92,12 +90,27 @@ app.controller("homeController", ($scope, $http) => {
               <td>${metode}</td>
               <td>${bank}</td>
               <td>
-                <button class="btn btn-primary" data-action="preview-foto-pembayaran" data-id=${row.id}>Foto Pembayaran</button>
+                <button class="btn btn-primary" data-action="preview-foto-pembayaran" data-id=${row.id}>Invoice</button>
               </td>
+              <td>${status[row.status]}</td>
              <td>${new Date(row.created_at).toLocaleString('id-ID', options)}</td>
+               <td>
+                <button class="btn btn-success" data-action="update-foto-pembayaran" data-konfirmasi=${row.status} data-id="${row.id}" data-toggle="modal" data-target="#modalPembayaran">Update</button>
+              </td>
             </tr > `);
         }, 1000)
 
+    }
+
+    const updateStatus = () => {
+        new TransaksiiService($http).updateStatusFotoPembayaran(idkonfirmasi, document.getElementById("status-pembayaran").value, res => {
+            const { success } = res;
+            if (success) {
+                swal({
+                    text: "Update status berhasil"
+                });
+            }
+        })
     }
     const setDetailTransaksi = (data) => {
 
@@ -128,7 +141,7 @@ app.controller("homeController", ($scope, $http) => {
               <td>${row.ayam.jenis}</td>
               <td>${row.jumlah}</td>
               <td>${formattedPrice(row.harga)}</td>
-              <td>${formattedPrice(row.harga*row.jumlah)}</td>
+              <td>${formattedPrice(row.harga * row.jumlah)}</td>
             </tr > `);
         }, 1000)
 
@@ -140,40 +153,67 @@ app.controller("homeController", ($scope, $http) => {
             currency: 'IDR'
         }).format(n);
     }
+    const detailTransaksi = (a, b) => {
+        new TransaksiiService($http).detailDataTransaksi(a, b.length, res => {
+            const { data } = res;
+            const status = ["", "Menunggu", "Sedang Di Proses", "Pengiriman", "Selesai"];
+            const orders = data.orders;
+            const customers = orders.customers;
+            const detail_orders = orders.order_details;
+            const konfirmasi_pembayaran = data.konfirmasi_pembayaran;
+            setDetailTransaksi(detail_orders);
+            const metode = data.metode.nama_metode;
+
+            document.getElementById("table-konfirmasi").classList.add("hide");
+            document.getElementById("title-konfirmasi-bank").classList.add("hide");
+            transaksi = data.id;
+            if (data.bank !== null) {
+                const bank = data.bank.nama_bank;
+                document.getElementById("table-konfirmasi").classList.remove("hide");
+                document.getElementById("title-konfirmasi-bank").classList.remove("hide");    
+                setFotoPembayaran(konfirmasi_pembayaran, metode, bank);
+            }
+            document.getElementById("nomor_orders").textContent = a;
+            document.getElementById("status").textContent = status[data.status];
+            document.getElementById("select_status_pembayaran").value = data.status;
+            document.getElementById("customers").textContent = customers.nama_lengkap;
+            const formattedPrice = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR'
+            }).format(data.total);
+            document.getElementById("total").textContent = formattedPrice;
+
+        });
+    }
     document.addEventListener("click", evt => {
         const dataaction = evt.target.getAttribute("data-action");
         if (dataaction === 'detail-transaksi') {
             tableElement.classList.add("hide");
             tableDetail.classList.remove("hide");
+
             const id = evt.target.getAttribute("data-id");
-            
+
             const nomor_order = evt.target.getAttribute("data-nomor");
             const idnomor = nomor_order + "" + id;
-            new TransaksiiService($http).detailDataTransaksi(idnomor,id.length, res => {
-                const { data } = res;
-                const status = ["tidak ada", "menunggu", "proses", "pengantaran", "selesai"];
-                const orders = data.orders;
-                const customers = orders.customers;
-                const detail_orders = orders.order_details;
-                const konfirmasi_pembayaran=data.konfirmasi_pembayaran;
-                setDetailTransaksi(detail_orders);
-                const metode=data.metode.nama_metode;
-                const bank=data.bank.nama_bank;
-                setFotoPembayaran(konfirmasi_pembayaran,metode,bank);
-                document.getElementById("nomor_orders").textContent = idnomor;
-                document.getElementById("status").textContent = status[orders.status];
-                document.getElementById("customers").textContent = customers.nama_lengkap;
-                const formattedPrice = new Intl.NumberFormat('id-ID', {
-                    style: 'currency',
-                    currency: 'IDR'
-                }).format(data.total);
-                document.getElementById("total").textContent = formattedPrice;
+            nomor = idnomor;
+            digit = id;
 
-            });
+            detailTransaksi(nomor, digit);
         }
-        else if(dataaction==='preview-foto-pembayaran') {
-            const idfoto=evt.target.getAttribute("data-id");
-            window.location="../api/v1/foto-pembayaran/"+idfoto;
+        else if (dataaction === 'preview-foto-pembayaran') {
+            const idfoto = evt.target.getAttribute("data-id");
+            window.location = "../api/v1/foto-pembayaran/" + idfoto;
+        } else if (dataaction === 'update-foto-pembayaran') {
+            const idstatus = evt.target.getAttribute("data-konfirmasi");
+            var status_pembayaran_select = document.getElementById("status-pembayaran");
+            status_pembayaran_select.value = idstatus;
+            idkonfirmasi = evt.target.getAttribute("data-id");
+            console.info(idkonfirmasi);
+        } else if (dataaction === 'update-status') {
+            updateStatus();
+        } else if (dataaction === 'kembali') {
+            tableElement.classList.remove("hide");
+            tableDetail.classList.add("hide");
         }
     });
 
@@ -188,8 +228,20 @@ app.controller("homeController", ($scope, $http) => {
                     document.getElementById('imagePreview').style.display = 'block';
                     document.getElementById('uploadedImage').src = e.target.result;
                 };
-                reader.readAsDataURL(file);  // Read file as Data URL
+                reader.readAsDataURL(file);
             }
+        } else if (dataaction === 'update-status-by-transaksi') {
+            const select_transaksi_pembayaran = evt.target.value;
+            new TransaksiiService($http).updateStatusTransaksi(transaksi, select_transaksi_pembayaran, res => {
+                const { success } = res;
+                if (!success) {
+                    swal({
+                        text: "Gagal ",
+                        "icon": "error"
+                    });
+                }
+            });
+
         }
     });
 
@@ -222,7 +274,7 @@ app.controller("homeController", ($scope, $http) => {
             year: 'numeric',
             timeZone: 'Asia/Jakarta'
         };
-        const status = ["", "menunggu", "proses", "pengantaran", "selesai"];
+        const status = ["", "Menunggu", "Sedang Di Proses", "Pengantaran", "Selesai"];
         setTimeout(() => {
             tbody.innerHTML = "";
             tbody.innerHTML = data.map((row, index) =>
@@ -234,9 +286,10 @@ app.controller("homeController", ($scope, $http) => {
               <td>${row.orders.customers.phone}</td>
               <td>${row.orders.customers.alamat}</td>
               <td>${new Date(row.created_at).toLocaleString('id-ID', options)}</td>
-              <td>${status[row.orders.status]}</td>
+              <td>${status[row.status]}</td>
               <td>
                         <button class="btn btn-warning" data-action="detail-transaksi" data-id=${row.id} data-nomor=${row.orders.nomor_order}>Detail</button>
+                        
                         <button class="btn btn-danger" data-action="hapus-jenis" data-value=${row.id}>Hapus Data</button>
               </td>
             </tr > `);
@@ -301,8 +354,6 @@ app.controller("homeController", ($scope, $http) => {
         aksi = 0;
 
     }
-
-
     const clearForm = () => {
         jenisData.forEach(input => {
             input.value = "";
@@ -310,7 +361,6 @@ app.controller("homeController", ($scope, $http) => {
         });
         aksi = 0;
     }
-
     const OpenToast = (message, status) => {
         toast.classList.add("show", status);
         toast.textContent = message;

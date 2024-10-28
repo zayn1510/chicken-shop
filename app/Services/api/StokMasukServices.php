@@ -9,21 +9,23 @@ use DB;
 class StokMasukServices
 {
 
-    function get_data_by_stok_masuk(int $itempage, int $startPage, int $jenis_ayam): JsonResponse
+    function get_data_by_stok_masuk(int $itempage, int $startPage, int $jenis_ayam,int $jenis_stok): JsonResponse
     {
         try {
             $totalstok = 0;
             if ($jenis_ayam == 0) {
-                $data = DB::table('stok_masuk')
-                    ->join('jenis_ayam', 'stok_masuk.jenis_ayam', '=', 'jenis_ayam.id')
-                    ->select('stok_masuk.*', 'jenis_ayam.jenis')
+                $data = DB::table('stok_ayam')
+                    ->join('jenis_ayam', 'stok_ayam.jenis_ayam', '=', 'jenis_ayam.id')
+                    ->select('stok_ayam.*', 'jenis_ayam.jenis')
+                    ->where("jenis_stok",$jenis_stok)
                     ->paginate($itempage, ['*'], 'page', $startPage);
                 $totalstok=StokModels::sum("jumlah");
             } else {
-                $data = DB::table('stok_masuk')
+                $data = DB::table('stok_ayam')
                     ->where("jenis_ayam", $jenis_ayam)
-                    ->join('jenis_ayam', 'stok_masuk.jenis_ayam', '=', 'jenis_ayam.id')
-                    ->select('stok_masuk.*', 'jenis_ayam.jenis')
+                    ->join('jenis_ayam', 'stok_ayam.jenis_ayam', '=', 'jenis_ayam.id')
+                    ->select('stok_ayam.*', 'jenis_ayam.jenis')
+                    ->where("jenis_stok",$jenis_stok)
                     ->paginate($itempage, ['*'], 'page', $startPage);
                
             }
@@ -56,9 +58,9 @@ class StokMasukServices
         try {
 
             if ($jenis_ayam == 0) {
-                $data = DB::table('stok_masuk')
-                    ->join('jenis_ayam', 'stok_masuk.jenis_ayam', '=', 'jenis_ayam.id')
-                    ->select('stok_masuk.*', 'jenis_ayam.jenis')
+                $data = DB::table('stok_ayam')
+                    ->join('jenis_ayam', 'stok_ayam.jenis_ayam', '=', 'jenis_ayam.id')
+                    ->select('stok_ayam.*', 'jenis_ayam.jenis')
                     ->paginate($itempage, ['*'], 'page', $startPage);
             } else {
                 $data = StokModels::where("jenis_ayam", $jenis_ayam)

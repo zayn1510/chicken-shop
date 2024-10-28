@@ -11,11 +11,9 @@ app.controller("homeController", ($scope, $http) => {
     const nextPage = document.getElementById("nextPage");
     var toast = document.getElementById("toast");
     let totalPagesTemp = 0;
-
-
-
+    var jenisSelect = document.getElementById("jenis");
     const getDataStokMasuk = () => {
-        new StokService($http).getDataStokBy(pageSize, PageNumber, 0, res => {
+        new StokService($http).getDataStokBy(pageSize, PageNumber, 0, 1, res => {
             const { data, totalPages } = res;
             totalPagesTemp = totalPages;
             initData(data, totalPages);
@@ -26,8 +24,6 @@ app.controller("homeController", ($scope, $http) => {
         new JenisService($http).getDataJenis(100, 0, res => {
             const { data } = res;
 
-
-            var jenisSelect = document.getElementById("jenis");
             for (var index = 0; index < data.length; index++) {
                 const elemetOption = document.createElement("option");
                 elemetOption.value = data[index].id;
@@ -35,7 +31,6 @@ app.controller("homeController", ($scope, $http) => {
 
                 jenisSelect.append(elemetOption);
             }
-            console.info(jenisSelect);
         });
     }
     getDataStokMasuk();
@@ -67,12 +62,12 @@ app.controller("homeController", ($scope, $http) => {
         } else if (dataaction === 'search-jenis') {
             const value = evt.target.value;
             if (value.length > 0) {
-                new StokService($http).getDataStokBy(pageSize, PageNumber, value, res => {
+                new StokService($http).getDataStokBy(pageSize, PageNumber, value, 1, res => {
                     const { data, totalPages } = res;
                     initData(data, totalPages);
                 });
             } else {
-                getDataJenisAyam();
+                getDataStokMasuk();
             }
         }
     });
@@ -83,7 +78,6 @@ app.controller("homeController", ($scope, $http) => {
         const dataid = res.target.getAttribute("data-value");
     });
 
-
     const setSkeltonRow = (data) => {
         const tbody = document.querySelector("tbody");
         tbody.innerHTML = "";
@@ -91,7 +85,8 @@ app.controller("homeController", ($scope, $http) => {
 
 
         for (let i = 0; i < numRowsToDisplay; i++) {
-            const skeletonRow = createSkeletonRow(10);
+            const skeletonRow = createSkeletonRow(4);
+           
             tbody.appendChild(skeletonRow);
         }
 
@@ -102,6 +97,7 @@ app.controller("homeController", ($scope, $http) => {
               <td>${index + 1}</td>
               <td>${row.jenis}</td>
               <td>${row.jumlah}</td>
+              <td>${lib.formatDate(row.created_at)}</td>
             </tr > `);
         }, 1000)
 

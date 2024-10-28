@@ -1,5 +1,5 @@
 import AyamaService from "../services/users/home.js";
-
+import * as lib from "../helpers/lib.js";
 var app = angular.module("homeApp", ['ngRoute']);
 app.controller("homeController", ($scope, $http) => {
 
@@ -20,6 +20,9 @@ app.controller("homeController", ($scope, $http) => {
     }
     orderNow.addEventListener("click", e => {
         const productData = getProductData();
+
+        // console.info(productData);
+        // return;
         new AyamaService($http).orderProducts(productData, res => {
             const { success, nomor, digit } = res;
             if (success) {
@@ -74,27 +77,35 @@ app.controller("homeController", ($scope, $http) => {
             const quantity = parseInt(quantityInput.value);
             const price = parseFloat(priceElement.getAttribute('data-price'));
             const temptotal = price * quantity;
-            const product = {
-                ayam: quantityInput.id.split('_')[1],
-                harga: price,
-                jumlah: quantity,
-            };
-            total += temptotal;
-            products.push(product);
+
+            if (quantity > 0) {
+                const product = {
+                    ayam: quantityInput.id.split('_')[1],
+                    harga: price,
+                    jumlah: quantity,
+                };
+                total += temptotal;
+                products.push(product);
+
+            }
         });
+        let bank = document.getElementById("bankList");
+        if (bank.value.length === 0) {
+            bank = 0;
+        }
         const order = {
             user_id: parseInt(userid),
             total: total,
             status: 1,
             detail_orders: products,
-            bank: document.getElementById("bankList").value,
-            metode: document.getElementById("paymentMethod").value
+            bank: bank,
+            metode: parseInt(document.getElementById("paymentMethod").value)
         };
 
         return order;
     }
 
-    const createProductActions = (productId, id) => {
+    const createProductActions = (productId, id, stok) => {
 
         const productActions = document.createElement('div');
         productActions.classList.add('product-actions');
@@ -103,21 +114,23 @@ app.controller("homeController", ($scope, $http) => {
         const minusButton = document.createElement('button');
         minusButton.textContent = '-';
         minusButton.onclick = function () {
-            changeQuantity(productId, -1);
+            changeQuantity(productId, id, -1, stok);
         };
 
 
         const quantityInput = document.createElement('input');
         quantityInput.type = 'number';
         quantityInput.id = productId + "_" + id;
-        quantityInput.value = 1;
-        quantityInput.min = 1;
+        quantityInput.className = "ayam_" + id;
+        quantityInput.value = 0;
+        quantityInput.min = 0;
+
 
 
         const plusButton = document.createElement('button');
         plusButton.textContent = '+';
         plusButton.onclick = function () {
-            changeQuantity(productId, id, 1);
+            changeQuantity(productId, id, 1, stok);
         };
 
 
@@ -128,17 +141,20 @@ app.controller("homeController", ($scope, $http) => {
         return productActions;
     }
 
-    const changeQuantity = (productId, id, change) => {
+    const changeQuantity = (productId, id, change, stok) => {
         const input = document.getElementById(productId + "_" + id);
         let currentValue = parseInt(input.value);
         currentValue += change;
-        if (currentValue < 1) currentValue = 1; // Mencegah nilai negatif
+        if (currentValue < 0) currentValue = 0;
+        if (currentValue > stok) {
+            currentValue = stok;
+        }
         input.value = currentValue;
     }
 
 
 
-    const createProductCard = (url, caption, harga, id) => {
+    const createProductCard = (url, caption, harga, id, stok) => {
         var productCard = document.createElement('div');
         productCard.className = 'product-card';
 
@@ -154,13 +170,20 @@ app.controller("homeController", ($scope, $http) => {
         // Membuat elemen p untuk harga
         const price = document.createElement('p');
         price.setAttribute("data-price", harga);
-        price.textContent = harga;
+        price.setAttribute("data-stok", stok);
+        price.textContent = lib.formatRupiah(harga);
+
+        const stock = document.createElement('p');
+        stock.setAttribute("data-stok", stok);
+        stock.textContent = "Stok tersedia " + stok;
+        stock.className = "poppins";
 
         // Menambahkan img, h4, dan p ke dalam div utama
         productCard.appendChild(img);
         productCard.appendChild(title);
         productCard.appendChild(price);
-        const elementActions = createProductActions("ayam", id);
+        productCard.appendChild(stock);
+        const elementActions = createProductActions("ayam", id, stok);
         productCard.appendChild(elementActions);
         return productCard;
     }
@@ -170,7 +193,8 @@ app.controller("homeController", ($scope, $http) => {
             const { data } = res;
             const elementProduk = document.querySelector(".product-list");
             for (var index = 0; index < data.length; index++) {
-                const productCard = createProductCard(data[index].produk_media[0].media_url, data[index].jenis, data[index].harga, data[index].id);
+                const productCard = createProductCard(data[index].produk_media[0].media_url, data[index].jenis,
+                    data[index].harga, data[index].id, data[index].stok);
                 elementProduk.append(productCard);
             }
         });
