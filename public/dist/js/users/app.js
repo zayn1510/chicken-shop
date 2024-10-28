@@ -12,6 +12,18 @@ app.controller("homeController", ($scope, $http) => {
     let totalPagesTemp = 0;
 
 
+    const mobileMenu = document.getElementById("mobile-menu");
+    const navList = document.querySelector(".nav-list");
+
+
+
+    // mobileMenu.addEventListener("click", () => {
+    //     const widthWindows = window.innerWidth;
+    //     navList.style.left = "-233px";
+    //     navList.classList.toggle("nav-active");
+    // });
+
+
     const createProductCard = (url, caption, harga, id, desc) => {
         const productCard = document.createElement("div");
         productCard.className = "product-card";
@@ -30,7 +42,7 @@ app.controller("homeController", ($scope, $http) => {
         title.textContent = caption;
         const description = document.createElement("p");
         description.className = "product-card__description";
-      
+
         description.textContent = desc;
 
         const priceRow = document.createElement("div");
@@ -68,13 +80,13 @@ app.controller("homeController", ($scope, $http) => {
             const { data } = res;
             const elementProduk = document.querySelector(".cont");
             for (var index = 0; index < data.length; index++) {
-                let str=data[index].keterangan;
-                if(str.length>50){
-                    str=str.substring(0, 50) + '...';
+                let str = data[index].keterangan;
+                if (str.length > 50) {
+                    str = str.substring(0, 50) + '...';
                 }
                 console.info(str);
                 const productCard = createProductCard(data[index].produk_media[0].media_url, data[index].jenis, data[index].harga,
-                     data[index].id, str);
+                    data[index].id, str);
                 elementProduk.append(productCard);
             }
         });

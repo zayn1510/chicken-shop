@@ -20,15 +20,20 @@
             <input type="text" placeholder="Cek Nomor Order" id="nomor_order" data-action="search-order">
             <button>Cek</button>
         </div>
-        <ul>
+        <div class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+        <ul class="nav-list">
             <li><a href="#">Beranda</a></li>
             <li><a href="#promo">Promo</a></li>
             <li><a href="#features">Kenapa Kami?</a></li>
             <li><a href="#testimonials">Testimoni</a></li>
             <li><a href="#">Kontak</a></li>
-
         </ul>
     </nav>
+    
     <header class="hero">
        <div class="container-chicken-shop">
         <div class="hero-content">
