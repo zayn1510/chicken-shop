@@ -1,8 +1,5 @@
 import * as lib from "../../helpers/lib.js";
 import ProductsService from "../../services/products.js";
-import KategoriService from "../../services/kategori.js";
-import SatuanService from "../../services/satuan.js";
-
 var app = angular.module("homeApp", ['ngRoute']);
 app.controller("homeController", ($scope, $http) => {
 
@@ -16,14 +13,19 @@ app.controller("homeController", ($scope, $http) => {
     const nextPage = document.getElementById("nextPage");
     const productForm = document.querySelector(".product-form");
     const tableElement = document.querySelector(".table-product");
-    const price = document.getElementById("price");
-
+    const productFoto = document.querySelector(".product-foto-form");
+    const price = document.getElementById("harga");
+    var toast = document.getElementById("toast");
+    let totalPagesTemp = 0;
     let aksi = 0;
+    var tempidproduk = 0;
+    let add = true;
 
 
     const getProduct = () => {
         new ProductsService($http).getAll(pageSize, PageNumber, res => {
             const { data, totalPages } = res;
+            totalPagesTemp = totalPages;
             initData(data, totalPages);
         });
     }
@@ -56,6 +58,22 @@ app.controller("homeController", ($scope, $http) => {
         }
     });
 
+    document.addEventListener("change", evt => {
+        const dataaction = evt.target.getAttribute("data-action");
+        if (dataaction === 'openfile') {
+            const file = evt.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('uploadBox').style.display = 'none';
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('uploadedImage').src = e.target.result;
+                };
+                reader.readAsDataURL(file);  // Read file as Data URL
+            }
+        }
+    });
+
     const convertToRupiah = () => {
         var value = price.value.replace(/[^,\d]/g, '').toString(); // Hapus karakter selain angka dan koma
         value = value.replace(/,/g, '');
@@ -74,8 +92,17 @@ app.controller("homeController", ($scope, $http) => {
         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
         price.value = 'Rp. ' + rupiah;
     }
+
+
+    const resetUploadFoto = () => {
+        document.getElementById('uploadBox').style.display = 'block';
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('uploadedImage').src = "";
+    }
     document.addEventListener("click", res => {
         const dataaction = res.target.getAttribute("data-action");
+        const dataid = res.target.getAttribute("data-value");
+
         if (dataaction === 'open-form') {
             clearForm();
         } else if (dataaction === 'save-form') {
@@ -87,53 +114,148 @@ app.controller("homeController", ($scope, $http) => {
         } else if (dataaction === 'cancel-form') {
             resetElement();
         } else if (dataaction === 'detail-product') {
-            const dataid = res.target.getAttribute("data-value");
             detailProduct(dataid);
         } else if (dataaction === 'hapus-product') {
-            const dataid = res.target.getAttribute("data-value");
             hapusProduct(dataid);
+        } else if (dataaction === 'foto-product') {
+            tableElement.classList.add("hide");
+            productFoto.classList.remove("hide")
+            document.getElementById("open-form").classList.remove("btn-primary");
+            document.getElementById("open-form").classList.add("btn-danger");
+            document.getElementById("open-form").innerHTML = "Kembali";
+            add = false;
+            getDataPhoto(dataid);
+        } else if (dataaction === 'removeupload') {
+            resetUploadFoto();
+        } else if (dataaction === 'uploadfoto') {
+            var fileinput = document.getElementById("fileInput");
+            var formData = new FormData();
+            formData.append("produk", tempidproduk);
+            formData.append("idfoto", 0);
+            formData.append("foto", fileinput.files[0]);
+
+
+            new ProductsService($http).createPhoto(formData, res => {
+
+                const { success } = res;
+                if (success) {
+                    swal({
+                        text: "Tambah Foto Berhasil !",
+                        icon: "success"
+                    });
+                    $('#modalFoto').modal('hide');
+                    getDataPhoto(tempidproduk);
+                    resetUploadFoto();
+                } else {
+                    swal({
+                        text: "Tambah Foto Gagal !",
+                        icon: "error"
+                    });
+                }
+
+            });
+
+        } else if (dataaction === 'hapus-foto') {
+            deletePhoto(dataid);
+        } else if (dataaction === 'preview-foto') {
+            window.open("api/v1/photo/" + res.target.getAttribute("data-value"), "_blank");
         }
     });
+
+    const getDataPhoto = (produkid) => {
+        tempidproduk = produkid;
+        new ProductsService($http).getPhoto(10, 0, produkid, res => {
+            const { data } = res;
+            createTablePhoto(data);
+        });
+    }
 
     const hapusProduct = (dataid) => {
         new ProductsService($http).delete(dataid, res => {
             const { success } = res;
+            console.info(success);
             if (!success) {
-                swal({
-                    text: "Hapus data gagal !",
-                    icon: "error"
-                });
+                OpenToast("Hapus data gagal !", "danger");
                 return;
             }
-            getSuplier();
+            OpenToast("Hapus data berhasil !", "success");
+            getProduct();
         });
     }
 
     const detailProduct = (dataid) => {
         new ProductsService($http).getAllById(dataid, res => {
             const { data } = res;
-            if (data.length > 0) {
-                const json = data[0];
+
+            if (data) {
+                const json = data;
                 id = json.id;
                 aksi = 1;
                 openElementForm();
-                const imageName = json.qrcode.split("/").pop();
-                const imageNameWithoutExtension = imageName.split('.').slice(0, -1).join('.');
-                product[0].value = imageNameWithoutExtension;
-                product[1].value = json.name;
-                product[2].value = json.idkategori;
-                product[3].value = json.description;
-                product[4].value = json.price;
-                product[5].value = json.stock;
-                product[6].value = json.idsatuan;
                 product.forEach(element => {
                     element.classList.add("font-12");
+                });
+                const keys = [
+                    "nama_produk", "ukuran_ayam", "bagian_ayam", "deskripsi", "harga", "stok",
+                    "diskon", "berat_rata_rata", "umur_ayam",
+                    "tanggal_masuk", "tanggal_produksi", "tanggal_kadaluarsa"
+                ];
+                keys.forEach((key, index) => {
+                    product[index].value = json[key];
                 });
 
             }
         });
     }
 
+    const createTablePhoto = (data) => {
+        const tableFoto = document.getElementById("table-foto");
+        let tbodyfoto = document.createElement("tbody");
+        let existingTbody = tableFoto.getElementsByTagName("tbody")[0];
+        if (existingTbody) {
+            existingTbody.remove();
+        }
+        tbodyfoto.innerHTML = "";
+        tableFoto.append(tbodyfoto);
+        const numRowsToDisplay = Math.min(data.length, 10);
+        for (let i = 0; i < numRowsToDisplay; i++) {
+            const skeletonRow = createSkeletonRow(3);
+            tbodyfoto.appendChild(skeletonRow);
+        }
+        setTimeout(() => {
+            tbodyfoto.innerHTML = "";
+            if (data.length === 0) {
+                tbodyfoto.innerHTML = `
+                        <tr class='text-center'>
+                            <td colspan="3">Tidak ada data yang tersedia</td>
+                        </tr>
+                    `;
+            } else {
+                tbodyfoto.innerHTML += data.map((row, index) => `
+                        <tr class='text-center'>
+                            <td>${index + 1}</td>
+                            <td>${row.media_url}</td>
+                            <td>
+                                <button class="btn btn-warning" data-action="preview-foto" data-value=${row.id}>Preview Foto</button>
+                                <button class="btn btn-danger" data-action="hapus-foto" data-value=${row.id}>Hapus Foto</button>
+                            </td>
+                        </tr>
+                    `).join('');
+            }
+
+            tbodyfoto.innerHTML += `
+                <tr class='text-center'>
+                    <td>
+                        ${data.length + Number(1)}
+                    </td>
+                    <td style="color:red">Belum ada foto</td>
+                    <td>
+                        <button class="btn btn-success"  data-toggle="modal" data-target="#modalFoto">Tambah Foto</button>
+                    </td>
+                </tr>
+            `;
+        }, 1000)
+    }
     const splitCamelCase = (text) => {
         let result = "";
         for (let i = 0; i < text.length; i++) {
@@ -149,7 +271,7 @@ app.controller("homeController", ($scope, $http) => {
         const tbody = document.querySelector("tbody");
         tbody.innerHTML = "";
         const numRowsToDisplay = Math.min(data.length, 10);
-   
+
 
         for (let i = 0; i < numRowsToDisplay; i++) {
             const skeletonRow = createSkeletonRow(10);
@@ -169,8 +291,8 @@ app.controller("homeController", ($scope, $http) => {
               <td>${row.diskon}</td>
               <td>${row.tanggal_masuk}</td>
               <td>${row.tanggal_produksi}</td>
-              
               <td>
+                        <button class="btn btn-success" data-action="foto-product" data-value=${row.id}>Foto Produk</button>
                         <button class="btn btn-warning" data-action="detail-product" data-value=${row.id}>Detail Data</button>
                         <button class="btn btn-danger" data-action="hapus-product" data-value=${row.id}>Hapus Data</button>
               </td>
@@ -192,42 +314,42 @@ app.controller("homeController", ($scope, $http) => {
         }
 
         const elementPageNumber = document.querySelectorAll(".page-number");
-
         if (elementPageNumber) {
             elementPageNumber.forEach(element => {
                 element.addEventListener("click", evt => {
                     const txtelement = evt.target.textContent;
-                    pageSize = txtelement - 1;
-                    checkPageActive();
+                    PageNumber = txtelement - 1
+                    nextPage.disabled = (PageNumber + 1 === totalPagesTemp);
+                    document.querySelector(".active-pagination").classList.remove("active-pagination");
+                    document.getElementsByClassName("page-number")[PageNumber].classList.add("active-pagination");
+                    prevPage.disabled = (PageNumber === 0);
+                    getDataByPagination();
                 });
             });
         }
     };
 
-    const checkPageActive = () => {
-        const pageActive = document.querySelector(".active-pagination")
-        pageActive.classList.remove("active-pagination");
-        const pageNumber = document.getElementsByClassName("page-number");
-        pageNumber[pageSize].classList.add("active-pagination");
-        if (pageSize === 0) {
-            prevPage.setAttribute("disabled", true);
-        } else if (pageSize > 0) {
-            prevPage.removeAttribute("disabled");
-        }
-        new SuplierService($http).getAll(pageSize, PageNumber, res => {
+    const checkPageActive = (check) => {
+        PageNumber += check ? 1 : -1;
+        nextPage.disabled = (PageNumber + 1 === totalPagesTemp);
+        document.querySelector(".active-pagination").classList.remove("active-pagination");
+        document.getElementsByClassName("page-number")[PageNumber].classList.add("active-pagination");
+        prevPage.disabled = (PageNumber === 0);
+        getDataByPagination();
+    }
+    const getDataByPagination = () => {
+        new ProductsService($http).getAll(pageSize, PageNumber + 1, res => {
             setSkeltonRow(res.data);
         });
     }
 
     prevPage.addEventListener("click", evt => {
-        pageSize--;
-        checkPageActive();
+        checkPageActive(false);
     });
 
     nextPage.addEventListener("click", evt => {
         prevPage.removeAttribute("disabled");
-        pageSize++;
-        checkPageActive();
+        checkPageActive(true);
     });
 
     getProduct();
@@ -237,12 +359,24 @@ app.controller("homeController", ($scope, $http) => {
         productForm.classList.add("hide");
         openForm.classList.remove("hide");
         aksi = 0;
+
     }
 
     const openElementForm = () => {
-        tableElement.classList.add("hide");
-        openForm.classList.add("hide");
-        productForm.classList.remove("hide");
+        if (!add) {
+            tableElement.classList.remove("hide");
+            productFoto.classList.add("hide")
+            document.getElementById("open-form").classList.add("btn-primary");
+            document.getElementById("open-form").classList.remove("btn-danger");
+            document.getElementById("open-form").innerHTML = "Tambah Data";
+            add = true;
+        } else {
+            tableElement.classList.add("hide");
+            openForm.classList.add("hide");
+            productForm.classList.remove("hide");
+        }
+
+
     }
     const clearForm = () => {
         product.forEach(input => {
@@ -298,39 +432,41 @@ app.controller("homeController", ($scope, $http) => {
                 return false;
             }
         }
-        const fileInput = document.getElementById("foto");
-        const files = fileInput.files;
-        const existingErrorMessage = fileInput.nextElementSibling;
-        if (existingErrorMessage && existingErrorMessage.classList.contains("text-red")) {
-            existingErrorMessage.remove();
-        }
+        // const fileInput = document.getElementById("foto");
+        // const files = fileInput.files;
+        // const existingErrorMessage = fileInput.nextElementSibling;
+        // if (existingErrorMessage && existingErrorMessage.classList.contains("text-red")) {
+        //     existingErrorMessage.remove();
+        // }
 
-        if (files.length === 0) {
-            const newMessage = "The file is required.";
-            const errorMessage = document.createElement('span');
-            errorMessage.textContent = newMessage;
-            errorMessage.classList.add("text-red");
-            fileInput.parentNode.insertBefore(errorMessage, fileInput.nextSibling);
-            return false;
-        }
+        // if (files.length === 0) {
+        //     const newMessage = "The file is required.";
+        //     const errorMessage = document.createElement('span');
+        //     errorMessage.textContent = newMessage;
+        //     errorMessage.classList.add("text-red");
+        //     fileInput.parentNode.insertBefore(errorMessage, fileInput.nextSibling);
+        //     return false;
+        // }
 
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const fileType = file.type;
+        // for (let i = 0; i < files.length; i++) {
+        //     const file = files[i];
+        //     const fileType = file.type;
 
-            if (fileType !== "image/jpeg" && fileType !== "image/png") {
-                const newMessage = "the format file is jpg,jpeg,png,and pneg";
-                const errorMessage = document.createElement('span');
-                errorMessage.textContent = newMessage;
-                errorMessage.classList.add("text-red");
-                fileInput.parentNode.insertBefore(errorMessage, fileInput.nextSibling);
-                return false;
-            }
-        }
+        //     if (fileType !== "image/jpeg" && fileType !== "image/png") {
+        //         const newMessage = "the format file is jpg,jpeg,png,and pneg";
+        //         const errorMessage = document.createElement('span');
+        //         errorMessage.textContent = newMessage;
+        //         errorMessage.classList.add("text-red");
+        //         fileInput.parentNode.insertBefore(errorMessage, fileInput.nextSibling);
+        //         return false;
+        //     }
+        // }
 
         return true;
     }
     const postProduct = () => {
+
+
         const message = [];
         var formdata = new FormData();
         product.forEach(element => {
@@ -339,63 +475,73 @@ app.controller("homeController", ($scope, $http) => {
             message.push(elementmessage);
             formdata.append(elementid, element.value);
         });
-        formdata.delete("price");
+        formdata.delete("harga");
         let formattedValue = price.value;
         let originalValue = formattedValue.replace(/[^,\d]/g, '').replace(',', '.');
-        formdata.append("price", originalValue);
+        formdata.append("harga", originalValue);
         if (!validationForm(message)) {
             return;
         }
 
-        var file = document.getElementById("foto");
-        formdata.append("foto", file.files[0]);
         new ProductsService($http).create(formdata, res => {
             const { success } = res;
             if (!success) {
-                swal({
-                    "text": "Simpan data gagal !",
-                    "icon": "error"
-                });
+                OpenToast("Simpan data gagal ", "danger");
+                console.info(toast);
                 return;
             }
+            OpenToast("Simpan data berhasil !", "success");
             clearForm();
             getProduct();
         })
-
+    }
+    const OpenToast = (message, status) => {
+        toast.classList.add("show", status);
+        toast.textContent = message;
+        setTimeout(function () {
+            toast.classList.remove("show", status);
+        }, 2000);
     }
 
     const updateProduct = () => {
-        var formdata = new FormData();
-        product.forEach(element => {
+        var formdata = [];
+        product.forEach((element, index) => {
             const elementid = element.getAttribute("id");
             const elementmessage = splitCamelCase(elementid) + " is required";
-            formdata.append(elementid, element.value);
+            formdata.push({
+                [elementid]: element.value
+            });
+
         });
+        const mergedObject = Object.assign({}, ...formdata);
 
-        const emptyBlob = new Blob([], { type: 'application/octet-stream' });
-        const emptyFile = new File([emptyBlob], "empty.bin");
-        var file = document.getElementById("foto");
-        var fileToUpload;
 
-        if (file.files.length === 0) {
-            fileToUpload = emptyFile
-        } else {
-            fileToUpload = file.files[0];
-        }
-
-        formdata.append("foto", fileToUpload);
-        formdata.append("id",)
-        new ProductsService($http).update(formdata, res => {
+        let formattedValue = price.value;
+        let originalValue = formattedValue.replace(/[^,\d]/g, '').replace(',', '.');
+        mergedObject.harga = originalValue;
+        new ProductsService($http).update(mergedObject, id, res => {
             const { success } = res;
             if (!success) {
-                swal({
-                    "text": "Simpan data gagal !",
-                    "icon": "error"
-                });
+                OpenToast("Simpan data gagal", "danger");
                 return;
             }
+            OpenToast("Simpan data berhasil", "success");
             clearForm();
             getProduct();
         })
+    }
+
+    const deletePhoto = (idfoto) => {
+        new ProductsService($http).deletePhoto(idfoto, tempidproduk, res => {
+            const { success } = res;
+            if (!success) {
+                swal({
+                    text: "Hapus foto gagal !",
+                    icon: "error"
+                });
+            }
+            getDataPhoto(tempidproduk);
+            resetUploadFoto();
+        });
     }
 });

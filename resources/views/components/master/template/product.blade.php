@@ -1,4 +1,4 @@
-<x-master.layout.header :title="$data['title']" :user="$data['user']" />
+<x-master.layout.header :title="$data['title']" :user="$data['user']" :website="$data['website']"/>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -30,6 +30,7 @@
                         <!-- /.card -->
 
                         <div class="card">
+                            <x-master.toast/>
                             <div class="card-header">
                                 <div class="row">
                                     <div class="col-md-10">
@@ -51,6 +52,7 @@
                                     </div>
                                 </div>
                                 <x-master.form.productform />
+                                <x-master.form.productfoto />
                             </div>
                             <!-- /.card-body -->
                         </div>

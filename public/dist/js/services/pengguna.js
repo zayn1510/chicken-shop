@@ -5,7 +5,7 @@ class PenggunaService {
 
     getDataPengguna(a, b, callback) {
         this.http({
-            url: `${API_SERVICE}users/` + a + "/" + b,
+            url: `${API_SERVICE}customers/` + a + "/" + b,
             method: "GET",
             headers: {
                 'Authorization': 'Bearer ' + accessToken // Attach the access token as a Bearer token
@@ -22,7 +22,7 @@ class PenggunaService {
             method: "POST",
             data: data,
             headers: {
-                'Authorization': 'Bearer ' + accessToken // Attach the access token as a Bearer token
+                'Authorization': 'Bearer ' + accessToken 
             }
         }).then(e => callback(e.data))
             .catch(err => {
@@ -34,7 +34,7 @@ class PenggunaService {
             url: `${API_SERVICE}users/` + a + "/" + b + "/" + c + "/" + d,
             method: "GET",
             headers: {
-                'Authorization': 'Bearer ' + accessToken // Attach the access token as a Bearer token
+                'Authorization': 'Bearer ' + accessToken 
             }
         }).then(e => callback(e.data))
             .catch(err => {
@@ -43,10 +43,10 @@ class PenggunaService {
     }
     deleteDataPengguna(a, callback) {
         this.http({
-            url: `${API_SERVICE}users/` + a,
+            url: `${API_SERVICE}customers/` + a,
             method: "DELETE",
             headers: {
-                'Authorization': 'Bearer ' + accessToken // Attach the access token as a Bearer token
+                'Authorization': 'Bearer ' + accessToken
             }
         }).then(e => callback(e.data))
             .catch(err => {

@@ -58,14 +58,13 @@ class ProductsService {
                 console.error(err);
             });
     }
-    update(obj, callback) {
+    update(obj, id, callback) {
         this.http({
-            url: `${API_SERVICE}produk/update`,
-            method: "POST",
+            url: `${API_SERVICE}produk/` + id,
+            method: "PUT",
             data: obj,
             headers: {
                 'Authorization': 'Bearer ' + accessToken,
-                'Content-Type': undefined
             }
         })
             .then(e => callback(e.data))
@@ -75,7 +74,7 @@ class ProductsService {
     }
     delete(a, callback) {
         this.http({
-            url: `${API_SERVICE}suplier/` + a,
+            url: `${API_SERVICE}produk/` + a,
             method: "DELETE",
             headers: {
                 'Authorization': 'Bearer ' + accessToken
@@ -84,6 +83,47 @@ class ProductsService {
             .catch(err => {
                 console.error(err);
             });
+    }
+
+    createPhoto(data, callback) {
+        this.http({
+            url: `${API_SERVICE}produk/create/photo`,
+            method: "POST",
+            data: data,
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+                'Content-Type': undefined
+            }
+        }).then(e => callback(e.data))
+            .catch(err => {
+                console.error(err);
+            });
+    }
+
+    getPhoto(a, b, c, callback) {
+        this.http({
+            url: `${API_SERVICE}photo/` + a + '/' + b + '/' + c,
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }).then(e => callback(e.data))
+            .catch(err => {
+                console.error(err);
+            })
+    }
+
+    deletePhoto(a, b, callback) {
+        this.http({
+            url: `${API_SERVICE}photo/` + a + '/' + b,
+            method: "DELETE",
+            headers: {
+                'Authorization': 'Bearer ' + accessToken,
+            }
+        }).then(e => callback(e.data))
+            .catch(err => {
+                console.error(err);
+            })
     }
 
 }

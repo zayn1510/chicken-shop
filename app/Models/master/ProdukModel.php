@@ -2,6 +2,7 @@
 
 namespace App\Models\master;
 
+use App\Models\api\v1\master\MediaProdukModels;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,16 +26,21 @@ class ProdukModel extends Model
         'tanggal_kadaluarsa',
         'umur_ayam',
         'cara_pembuatan',
-        'sertifikat',
         'diskon',
-        'rak',
         'tanggal_produksi',
         'is_promo'
     ];
 
-    
-    protected $casts = [
-        'tanggal_masuk' => 'date',
-        'tanggal_kadaluarsa' => 'date',
-    ];
+    public function media()
+    {
+        return $this->hasMany(MediaProdukModels::class, 'produk_id');
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function ($produk) {
+            $produk->media()->delete();
+        });
+    }
+
 }

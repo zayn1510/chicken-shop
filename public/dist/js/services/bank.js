@@ -3,67 +3,62 @@ class BankService {
         this.http = http;
     }
 
-    getAll(a, b, callback) {
+    getDataBank(a, b, callback) {
         this.http({
-            url: `${API}bank/` + a + "/" + b,
+            url: `${API_SERVICE}bank/` + a + "/" + b,
             method: "GET",
             headers: {
-                'Authorization': 'Bearer ' + accessToken // Attach the access token as a Bearer token
+                'Authorization': 'Bearer ' + accessToken
             }
         }).then(e => callback(e.data))
             .catch(err => {
                 callback(err);
             })
     }
-
-    filterDataByColumn(a, b, c, d, callback) {
+    createDataBank(data, callback) {
         this.http({
-            url: `${API}bank/` + a + "/" + b + "/" + c + "/" + d,
+            url: `${API_SERVICE}bank`,
+            method: "POST",
+            data: data,
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }).then(e => callback(e.data))
+            .catch(err => {
+                callback(err);
+            })
+    }
+    updateDataBank(data, id, callback) {
+        this.http({
+            url: `${API_SERVICE}bank/` + id,
+            method: "PUT",
+            data: data,
+            headers: {
+                'Authorization': 'Bearer ' + accessToken
+            }
+        }).then(e => callback(e.data))
+            .catch(err => {
+                callback(err);
+            })
+    }
+    detailDataBank(a, callback) {
+        this.http({
+            url: `${API_SERVICE}bank/` + a,
             method: "GET",
             headers: {
-                'Authorization': 'Bearer ' + accessToken // Attach the access token as a Bearer token
+                'Authorization': 'Bearer ' + accessToken
             }
         }).then(e => callback(e.data))
             .catch(err => {
                 console.error(err);
             });
     }
-
-
-    create(obj, callback) {
+    deleteDataBank(a, callback) {
         this.http({
-            url: `${API}bank`,
-            method: "POST",
-            data: obj,
-            headers: {
-                'Authorization': 'Bearer ' + accessToken // Attach the access token as a Bearer token
-            }
-        })
-            .then(e => callback(e.data))
-            .catch(err => {
-                console.error(err);
-            });
-    }
-    update(obj, id, callback) {
-        this.http({
-            url: `${API}bank/ ` + id,
-            method: "PUT",
-            data: obj,
-            headers: {
-                'Authorization': 'Bearer ' + accessToken // Attach the access token as a Bearer token
-            }
-        })
-            .then(e => callback(e.data))
-            .catch(err => {
-                console.error(err);
-            });
-    }
-    delete(a, callback) {
-        this.http({
-            url: `${API}bank/` + a,
+            url: `${API_SERVICE}bank/` + a,
             method: "DELETE",
             headers: {
-                'Authorization': 'Bearer ' + accessToken // Attach the access token as a Bearer token
+                'Authorization': 'Bearer ' + accessToken
             }
         }).then(e => callback(e.data))
             .catch(err => {
@@ -72,4 +67,4 @@ class BankService {
     }
 }
 
-export default BankService
+export default BankService;

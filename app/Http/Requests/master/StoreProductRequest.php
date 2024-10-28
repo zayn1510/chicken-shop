@@ -32,7 +32,7 @@ class StoreProductRequest extends FormRequest
             'ukuran_ayam' => 'nullable|in:kecil,sedang,besar', 
             'bagian_ayam' => 'nullable|in:utuh,dada,paha,sayap',
             'tanggal_masuk' => 'nullable|date',
-            'tanggal_kadaluarsa' => 'nullable|date|after:tanggal_masuk',
+            'tanggal_kadaluarsa' => 'nullable|date',
             'umur_ayam' => 'nullable|string|max:30', 
             'cara_pembuatan' => 'nullable|in:fresh chilled,frozen,olahan',
             'sertifikat' => 'nullable|string|max:100',

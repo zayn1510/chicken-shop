@@ -58,13 +58,13 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index.html" class="brand-link">
-                <img src="{{ asset('icon.png') }}" class="img-responsive img-logo" alt="User Image">
+
             </a>
 
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar user (optional) -->
-                <p class="title-admin poppins">Administrasi Pasipa</p>
+                <p class="title-admin poppins">{{ $website->name }}</p>
 
                 <!-- SidebarSearch Form -->
                 <div class="form-inline">
@@ -105,72 +105,105 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('users') }}" class="nav-link">
+                                    <a href="{{ url('dashboard/bank') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Bank</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('dashboard/metode') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Metode</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('dashboard/users') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p class="poppins font-13">Pengguna</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('dashboard/ayam') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Ayam</p>
+                                    </a>
+                                </li>
 
-                                <li class="nav-item">
-                                    <a href="{{ url('kategori') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Kategori</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('satuan') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Satuan</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('suplier') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Suplier</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ url('product') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Produk</p>
-                                    </a>
-                                </li>
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-box"></i>
+                                <i class="nav-icon fas fa-table"></i>
                                 <p class="poppins font-13">
                                     Data Transaksi
-                                    <i class="right fas fa-angle-right"></i>
+                                    <i class="right fas fa-angle-right mt-nav-5"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/dashboard/penawaran') }}" class="nav-link">
+                                    <a href="{{ url('dashboard/transaksi-pembayaran') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Pembelian</p>
+                                        <p class="poppins font-13">Pembayaran</p>
+                                    </a>
+                                </li>
+
+
+                            </ul>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-box"></i>
+                                <p class="poppins font-13">
+                                    Riwayat Stok Ayam
+                                    <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="{{ url('dashboard/stok/masuk') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Masuk</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/dashboard/pemenang') }}" class="nav-link">
+                                    <a href="{{ url('dashboard/stok/keluar') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p class="poppins font-13">Penjualan</p>
+                                        <p class="poppins font-13">Keluar</p>
                                     </a>
                                 </li>
+                            </ul>
                         </li>
-                    </ul>
-                    </li>
 
-                    <li class="nav-item">
-                        <a href="{{ url('admin/dashboard/akun') }}" class="nav-link">
-                            <i class="nav-icon fas fa-user"></i>
-                            <p class="poppins font-13">
-                                Akun
-                                <i class=""></i>
-                            </p>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p class="poppins font-13">
+                                    Pengaturan
+                                    <i class="right fas fa-angle-right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+
+                                <li class="nav-item">
+                                    <a href="{{ url('dashboard/akun') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Akun</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ url('dashboard/website') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p class="poppins font-13">Website</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+
 
 
                 </nav>

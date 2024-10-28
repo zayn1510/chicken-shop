@@ -45,14 +45,14 @@ app.controller("homeController", ($scope, $http) => {
         })
         if (check) {
 
-            new loginService($http).login(dataJson, (res) => {
+            new loginService($http).loginAdmin(dataJson, (res) => {
                 const { status } = res;
                 if (status) {
                     swal({
                         text: "Login Success",
                         icon: "success"
                     });
-                    window.location.href = "dashboard";
+                    window.location.href = "../dashboard";
                     return;
                 }
                 swal({

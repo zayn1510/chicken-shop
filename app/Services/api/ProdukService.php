@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Services\api;
+namespace App\Services\Api;
 use App\Http\Requests\master\StoreProductRequest;
 use App\Models\master\ProdukModel;
+use File;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use DB;
@@ -13,71 +14,69 @@ class ProdukService
     public function get_product(int $itemPage, int $startPage): JsonResponse
     {
         try {
-            $produk=DB::table("produk");
-            $data=[];
-            $totalPages=0;
+            $produk = DB::table("produk");
+            $data = [];
+            $totalPages = 0;
             if ($produk->count() > 0) {
                 $totalPages = ceil($produk->count() / $itemPage);
                 $data = DB::table("produk")
                     ->skip(($startPage - 1) * $itemPage)
                     ->take($itemPage)
                     ->get();
-            }    
+            }
             return response()->json(
                 [
-                "message" => "success",
-                "success" => true,
-                'totalItems' => $produk->count(),
-                'totalPages' => $totalPages,
-                'currentPage' => $startPage,
-                'itemsPerPage' => $itemPage,
-                'data' => $data,
+                    "message" => "success",
+                    "success" => true,
+                    'totalItems' => $produk->count(),
+                    'totalPages' => $totalPages,
+                    'currentPage' => $startPage,
+                    'itemsPerPage' => $itemPage,
+                    'data' => $data,
                 ]
             );
         } catch (\Throwable $th) {
             return response()->json(
                 [
-                "message" => "error in database ".$th->getMessage(),
-                "success" => false,
+                    "message" => "error in database " . $th->getMessage(),
+                    "success" => false,
                 ]
             );
         }
     }
 
-    function store_product(StoreProductRequest $request) : JsonResponse
+    function store_product(StoreProductRequest $request): JsonResponse
     {
         try {
-            $data=$request->validated();
-
-          
+            $data = $request->validated();
             DB::table("produk")->insert($data);
             return response()->json(
                 [
-                    "message"=>"success",
-                    "status"=>true,
-                    "data"=>$data
+                    "message" => "success",
+                    "success" => true,
+                    "data" => $data
                 ]
             );
         } catch (\ErrorException $th) {
             return response()->json(
                 [
-                "messsage"=>"failed",
-                "status"=>false,
-                "error"=>$th->getMessage()
+                    "messsage" => "failed",
+                    "success" => false,
+                    "error" => $th->getMessage()
                 ]
             );
         }
     }
 
-    function update_product(StoreProductRequest $request,int $id):JsonResponse
+    function update_product(StoreProductRequest $request, int $id): JsonResponse
     {
         try {
-            $data=$request->validated();
+            $data = $request->validated();
             ProdukModel::findOrFail($id)->update($data);
             return response()->json(
                 [
-                    "message"=>"success",
-                    "status"=>true
+                    "message" => "success",
+                    "success" => true
                 ]
             );
         } catch (ModelNotFoundException $e) {
@@ -89,9 +88,9 @@ class ProdukService
         } catch (\Throwable $th) {
             return response()->json(
                 [
-                "messsage"=>"failed",
-                "status"=>false,
-                "error"=>$th->getMessage()
+                    "messsage" => "failed",
+                    "success" => false,
+                    "error" => $th->getMessage()
                 ]
             );
         }
@@ -101,10 +100,17 @@ class ProdukService
     {
         try {
             ProdukModel::findOrFail($id)->delete();
+            $path=public_path("produk/".$id);
+
+            if (File::exists($path)) {
+                File::deleteDirectory($path);
+            }
+        
+            
             return response()->json(
                 [
-                    "message"=>"success",
-                    "status"=>true
+                    "message" => "success",
+                    "success" => true
                 ]
             );
         } catch (ModelNotFoundException $e) {
@@ -116,9 +122,9 @@ class ProdukService
         } catch (\Throwable $th) {
             return response()->json(
                 [
-                "messsage"=>"failed",
-                "status"=>false,
-                "error"=>$th->getMessage()
+                    "messsage" => "failed",
+                    "status" => false,
+                    "error" => $th->getMessage()
                 ]
             );
         }
@@ -130,8 +136,8 @@ class ProdukService
         try {
             return response()->json(
                 [
-                    "message"=>"success",
-                    "status"=>true,
+                    "message" => "success",
+                    "status" => true,
                     "data" => ProdukModel::findOrFail($id)->first()
                 ]
             );
@@ -144,9 +150,9 @@ class ProdukService
         } catch (\Throwable $th) {
             return response()->json(
                 [
-                "messsage"=>"failed",
-                "status"=>false,
-                "error"=>$th->getMessage()
+                    "messsage" => "failed",
+                    "status" => false,
+                    "error" => $th->getMessage()
                 ]
             );
         }
