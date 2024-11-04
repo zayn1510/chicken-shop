@@ -9,7 +9,7 @@ use DB;
 class StokMasukServices
 {
 
-    function get_data_by_stok_masuk(int $itempage, int $startPage, int $jenis_ayam, int $jenis_stok, string $startdate, string $enddate): JsonResponse
+    function get_data_by_stok_masuk(int $itempage, int $startPage, int $jenis_ayam, int $jenis_stok,): JsonResponse
     {
         try {
             $totalstok = 0;
@@ -23,10 +23,6 @@ class StokMasukServices
                 $totalstok = StokModels::sum("jumlah");
             } elseif ($jenis_stok != 0) {
                 $data = $query->where("jenis_ayam", $jenis_ayam)
-                    ->paginate($itempage, ['*'], 'page', $startPage);
-            } elseif ($startdate !== '0000-00-00') {
-                $data = $query->where("jenis_ayam", $jenis_ayam)
-                    ->whereBetween('created_at',[$startdate,$enddate])
                     ->paginate($itempage, ['*'], 'page', $startPage);
             }
 

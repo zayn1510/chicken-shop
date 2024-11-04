@@ -93,7 +93,7 @@ Route::prefix("v1")->group(function () {
         Route::delete("{id}", [StokMasukController::class, "deleteData"]);
     });
     Route::prefix("stok_masuk_by")->group(function () {
-        Route::get("/{a}/{b}/{c}/{d}/{e}/{f}", [StokMasukController::class, "getDataByStokMasuk"]);
+        Route::get("/{a}/{b}/{c}/{d}", [StokMasukController::class, "getDataByStokMasuk"]);
     });
     Route::prefix("keranjang-user")->group(function () {
         Route::get("/{a}/{b}", [KeranjangController::class, "getKeranjang"]);
