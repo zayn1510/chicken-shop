@@ -15,6 +15,7 @@
                         <tr class="text-center">
                             <th>No</th>
                             <th>Stok</th>
+                            <th>Tanggal Masuk</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>

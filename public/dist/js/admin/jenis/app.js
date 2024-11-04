@@ -175,6 +175,7 @@ app.controller("homeController", ($scope, $http) => {
         } else if (dataaction === 'hapus-stok') {
             deleteStok(dataid);
         }
+       
     });
 
     const clearFormStok = () => {
@@ -258,6 +259,7 @@ app.controller("homeController", ($scope, $http) => {
             const skeletonRow = createSkeletonRow(3);
             tbodyfoto.appendChild(skeletonRow);
         }
+
         setTimeout(() => {
             tbodyfoto.innerHTML = "";
             if (data.length === 0) {
@@ -271,6 +273,7 @@ app.controller("homeController", ($scope, $http) => {
                         <tr class='text-center'>
                             <td>${index + 1}</td>
                             <td>${row.jumlah}</td>
+                            <td>${lib.formatDate(new Date(row.created_at))}</td>
                             <td>
                                 <button class="btn btn-danger" data-action="hapus-stok" data-value=${row.id}>Hapus Stok</button>
                             </td>
@@ -390,7 +393,7 @@ app.controller("homeController", ($scope, $http) => {
 
     const getDataStok = (dataid) => {
         tempidjenis = dataid;
-        new StokService($http).getDataStok(100, PageNumber, dataid, res => {
+        new StokService($http).getDataStokBy(100, PageNumber, dataid, 1, res => {
             const { data } = res;
             createStokAyam(data);
         });

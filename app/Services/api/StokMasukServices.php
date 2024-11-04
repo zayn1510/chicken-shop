@@ -9,25 +9,25 @@ use DB;
 class StokMasukServices
 {
 
-    function get_data_by_stok_masuk(int $itempage, int $startPage, int $jenis_ayam,int $jenis_stok): JsonResponse
+    function get_data_by_stok_masuk(int $itempage, int $startPage, int $jenis_ayam, int $jenis_stok, string $startdate, string $enddate): JsonResponse
     {
         try {
             $totalstok = 0;
+            $query = DB::table('stok_ayam')
+                ->join('jenis_ayam', 'stok_ayam.jenis_ayam', '=', 'jenis_ayam.id')
+                ->select('stok_ayam.*', 'jenis_ayam.jenis')
+                ->where("jenis_stok", $jenis_stok);
+
             if ($jenis_ayam == 0) {
-                $data = DB::table('stok_ayam')
-                    ->join('jenis_ayam', 'stok_ayam.jenis_ayam', '=', 'jenis_ayam.id')
-                    ->select('stok_ayam.*', 'jenis_ayam.jenis')
-                    ->where("jenis_stok",$jenis_stok)
+                $data = $query->paginate($itempage, ['*'], 'page', $startPage);
+                $totalstok = StokModels::sum("jumlah");
+            } elseif ($jenis_stok != 0) {
+                $data = $query->where("jenis_ayam", $jenis_ayam)
                     ->paginate($itempage, ['*'], 'page', $startPage);
-                $totalstok=StokModels::sum("jumlah");
-            } else {
-                $data = DB::table('stok_ayam')
-                    ->where("jenis_ayam", $jenis_ayam)
-                    ->join('jenis_ayam', 'stok_ayam.jenis_ayam', '=', 'jenis_ayam.id')
-                    ->select('stok_ayam.*', 'jenis_ayam.jenis')
-                    ->where("jenis_stok",$jenis_stok)
+            } elseif ($startdate !== '0000-00-00') {
+                $data = $query->where("jenis_ayam", $jenis_ayam)
+                    ->whereBetween('created_at',[$startdate,$enddate])
                     ->paginate($itempage, ['*'], 'page', $startPage);
-               
             }
 
             return response()->json(

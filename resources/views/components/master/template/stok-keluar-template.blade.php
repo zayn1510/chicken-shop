@@ -34,17 +34,31 @@
                         <div class="card">
                             <x-master.toast/>
                             <div class="card-header">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <h5 class="font-13 bold">Data {{ $data["title"] }}</h5>
+                                <div class="row form-report">
+                                    <div class="col-md-3 pull-right">
+                                        <div class="form-group">
+                                            <select class="form-control font-12" name="jenis" id="jenis"
+                                                data-action="search-jenis">
+                                                <option value="">Semua</option>
+                                            </select>
+                                        </div>
                                     </div>
-
-                                    <div class="col-md-2 pull-right">
-                                            <div class="form-group">
-                                                <select class="form-control font-12" name="jenis" id="jenis" data-action="search-jenis">
-                                                    <option value="">Semua</option>
-                                                </select>
-                                            </div>
+                                    <div class="col-md-3 pull-right">
+                                        <div class="form-group">
+                                            <input type='date' class="form-control" id="startdate"
+                                                name="startdate" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 pull-right">
+                                        <div class="form-group">
+                                            <input type='date' class="form-control" id="enddate"
+                                                name="enddate" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 pull-right">
+                                        <div class="form-group">
+                                           <button class="btn btn-primary" data-action='cetak-laporan'>Cetak Laporan</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

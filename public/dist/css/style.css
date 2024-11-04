@@ -708,3 +708,7 @@ button:disabled {
 .remove-btn:hover {
     background-color: #ff1744;
 }
+
+.form-report input{
+    font-size:12;
+  }

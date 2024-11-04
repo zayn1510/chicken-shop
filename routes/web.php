@@ -29,6 +29,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth']], function () {
     Route::get("website", [Page::class, "admin_website"])->name("dashboard.website");
     Route::get("metode", [Page::class, "metode"])->name("dashboard.metode");
     Route::get("transaksi-pembayaran", [Page::class, "admin_transaksi"])->name("dashboard.transaksi.pembayaran"); 
+    Route::get("cetak-laporan/{a}/{b}/{c}/{d}", [Page::class, "admin_laporan"])->name("dashboard.cetak.laporan"); 
+    
 });
 
 Route::get("/", [Page::class, "home"])->name("home");

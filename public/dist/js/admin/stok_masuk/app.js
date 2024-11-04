@@ -12,6 +12,9 @@ app.controller("homeController", ($scope, $http) => {
     var toast = document.getElementById("toast");
     let totalPagesTemp = 0;
     var jenisSelect = document.getElementById("jenis");
+
+    const startdate = document.getElementById('startdate');
+    const enddate = document.getElementById('enddate');
     const getDataStokMasuk = () => {
         new StokService($http).getDataStokBy(pageSize, PageNumber, 0, 1, res => {
             const { data, totalPages } = res;
@@ -75,7 +78,35 @@ app.controller("homeController", ($scope, $http) => {
 
     document.addEventListener("click", res => {
         const dataaction = res.target.getAttribute("data-action");
-        const dataid = res.target.getAttribute("data-value");
+
+        if (dataaction === 'cetak-laporan') {
+
+            const start = new Date(startdate.value);
+            const end = new Date(enddate.value);
+
+            if (startdate.value.length == 0 && (enddate.value.length == 0)) {
+                swal({
+                    text: "Pilih awal dan akhir tanggal dulu !",
+                    icon: "warning"
+                });
+            } else if (end < start) {
+                swal({
+                    text: "Tanggal akhir tidak boleh lebih kecil dari tanggal awal!",
+                    icon: "warning"
+                });
+            } else {
+                let newvalue = null;
+                if (jenisSelect.value.length == 0) {
+                    newvalue = 'all';
+                } else {
+                    newvalue = jenisSelect.value;
+                }
+
+                window.location.href = '../cetak-laporan/' + newvalue + '/' + startdate.value + "/" + enddate.value+"/"+1;
+            }
+        }
+
+
     });
 
     const setSkeltonRow = (data) => {
@@ -86,7 +117,7 @@ app.controller("homeController", ($scope, $http) => {
 
         for (let i = 0; i < numRowsToDisplay; i++) {
             const skeletonRow = createSkeletonRow(4);
-           
+
             tbody.appendChild(skeletonRow);
         }
 

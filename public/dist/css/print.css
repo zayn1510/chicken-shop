@@ -1,19 +1,87 @@
 
 
-#data-jurnal tr td {
-    padding: 5px;
-    border-bottom: 2px solid #CCC;
+* {
+    background-color: transparent !important;
+    color: #000 !important;
 }
-table{
-    font-family: font1;
+
+
+body {
+    margin: 0;
+}
+
+table {
+    font-family: Arial, sans-serif;
     width: 100%;
 }
-.border-laporan{
- background-color: #007BFF;
- color: white;
- width: 50%;   
- border-radius: 10px;
-}
-.border-laporan h4{
+
+.table tr th, .table tr td {
+    border: 2px solid black;
     padding: 10px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.border-laporan {
+    background-color: #007BFF;
+    color: white;
+    width: 50%;
+    border-radius: 10px;
+}
+
+.border-laporan h4 {
+    padding: 10px;
+}
+
+@media print {
+
+    * {
+        color: #000 !important;
+        background: transparent !important;
+        -webkit-print-color-adjust: exact;
+    }
+
+   
+    body {
+        margin: 0;
+    }
+
+    
+    .table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .table tr th, .table tr td {
+        padding: 8px;
+        border: 1px solid black;
+        font-size: 12px;
+    }
+
+   
+    .border-laporan {
+        width: 100%;
+        background-color: #000;
+        color: #fff;
+        border-radius: 0;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .border-laporan h4 {
+        font-size: 16px;
+        margin: 0;
+        padding: 10px;
+    }
+
+    .hero-image{
+        width: 90px;
+        height: 80px;
+        
+    }
+    .no-print {
+        display: none;
+    }
 }

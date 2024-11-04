@@ -12,8 +12,11 @@ app.controller("homeController", ($scope, $http) => {
     var toast = document.getElementById("toast");
     let totalPagesTemp = 0;
     var jenisSelect = document.getElementById("jenis");
+
+    const startdate = document.getElementById('startdate');
+    const enddate = document.getElementById('enddate');
     const getDataStokMasuk = () => {
-        new StokService($http).getDataStokBy(pageSize, PageNumber, 0, 2, res => {
+        new StokService($http).getDataStokBy(pageSize, PageNumber, 0, 1, res => {
             const { data, totalPages } = res;
             totalPagesTemp = totalPages;
             initData(data, totalPages);
@@ -23,8 +26,6 @@ app.controller("homeController", ($scope, $http) => {
     const getDataJenisAyam = () => {
         new JenisService($http).getDataJenis(100, 0, res => {
             const { data } = res;
-
-
 
             for (var index = 0; index < data.length; index++) {
                 const elemetOption = document.createElement("option");
@@ -64,7 +65,7 @@ app.controller("homeController", ($scope, $http) => {
         } else if (dataaction === 'search-jenis') {
             const value = evt.target.value;
             if (value.length > 0) {
-                new StokService($http).getDataStokBy(pageSize, PageNumber, value, 2, res => {
+                new StokService($http).getDataStokBy(pageSize, PageNumber, value, 1, res => {
                     const { data, totalPages } = res;
                     initData(data, totalPages);
                 });
@@ -77,9 +78,36 @@ app.controller("homeController", ($scope, $http) => {
 
     document.addEventListener("click", res => {
         const dataaction = res.target.getAttribute("data-action");
-        const dataid = res.target.getAttribute("data-value");
-    });
 
+        if (dataaction === 'cetak-laporan') {
+
+            const start = new Date(startdate.value);
+            const end = new Date(enddate.value);
+
+            if (startdate.value.length == 0 && (enddate.value.length == 0)) {
+                swal({
+                    text: "Pilih awal dan akhir tanggal dulu !",
+                    icon: "warning"
+                });
+            } else if (end < start) {
+                swal({
+                    text: "Tanggal akhir tidak boleh lebih kecil dari tanggal awal!",
+                    icon: "warning"
+                });
+            } else {
+                let newvalue = null;
+                if (jenisSelect.value.length == 0) {
+                    newvalue = 'all';
+                } else {
+                    newvalue = jenisSelect.value;
+                }
+
+                window.location.href = '../cetak-laporan/' + newvalue + '/' + startdate.value + "/" + enddate.value+"/"+2;
+            }
+        }
+
+
+    });
 
     const setSkeltonRow = (data) => {
         const tbody = document.querySelector("tbody");
@@ -89,25 +117,19 @@ app.controller("homeController", ($scope, $http) => {
 
         for (let i = 0; i < numRowsToDisplay; i++) {
             const skeletonRow = createSkeletonRow(4);
+
             tbody.appendChild(skeletonRow);
         }
 
         setTimeout(() => {
             tbody.innerHTML = "";
-            if (data.length === 0) {
-                tbody.innerHTML = `
-                <tr class='text-center'>
-                  <td colspan="4">Tidak ada data</td>
-                </tr > `;
-            } else {
-                tbody.innerHTML = data.map((row, index) => `
-                <tr class='text-center'>
-                  <td>${index + 1}</td>
-                  <td>${row.jenis}</td>
-                  <td>${row.jumlah}</td>
-                 <td>${lib.formatDate(row.created_at)}</td>
-                </tr > `);
-            }
+            tbody.innerHTML = data.map((row, index) => `
+            <tr class='text-center'>
+              <td>${index + 1}</td>
+              <td>${row.jenis}</td>
+              <td>${row.jumlah}</td>
+              <td>${lib.formatDate(row.created_at)}</td>
+            </tr > `);
         }, 1000)
 
     }
