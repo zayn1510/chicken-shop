@@ -9,7 +9,8 @@ use App\Models\api\v1\master\WebsiteModel;
 use Auth;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-
+use DB;
+use Carbon\Carbon;
 class Page extends Controller
 {
 
@@ -27,7 +28,7 @@ class Page extends Controller
         $data["user"] = (object) [
             "name" => Auth::user()->name
         ];
-        $data["website"]=$this->getDataWebsite();
+        $data["website"] = $this->getDataWebsite();
         $data["card"] = [
             "user" => 10,
             "ayam" => JenisAyamModels::count(),
@@ -43,7 +44,7 @@ class Page extends Controller
         $data["user"] = (object) [
             "name" => Auth::user()->name
         ];
-        $data["website"]=$this->getDataWebsite();
+        $data["website"] = $this->getDataWebsite();
         return view("components.master.template.user", compact("data"));
     }
 
@@ -54,7 +55,7 @@ class Page extends Controller
         $data["user"] = (object) [
             "name" => Auth::user()->name
         ];
-        $data["website"]=$this->getDataWebsite();
+        $data["website"] = $this->getDataWebsite();
         return view("components.master.template.jenisayam", compact("data"));
     }
 
@@ -64,7 +65,7 @@ class Page extends Controller
         $data["user"] = (object) [
             "name" => Auth::user()->name
         ];
-        $data["website"]=$this->getDataWebsite();
+        $data["website"] = $this->getDataWebsite();
         return view("components.master.template.product", compact("data"));
     }
 
@@ -74,7 +75,7 @@ class Page extends Controller
         $data["user"] = (object) [
             "name" => Auth::user()->name
         ];
-        $data["website"]=$this->getDataWebsite();
+        $data["website"] = $this->getDataWebsite();
         return view("components.master.template.stok_masuk", compact("data"));
     }
 
@@ -84,7 +85,7 @@ class Page extends Controller
         $data["user"] = (object) [
             "name" => Auth::user()->name
         ];
-        $data["website"]=$this->getDataWebsite();
+        $data["website"] = $this->getDataWebsite();
         return view("components.master.template.bank_template", compact("data"));
     }
 
@@ -94,7 +95,7 @@ class Page extends Controller
         $data["user"] = (object) [
             "name" => Auth::user()->name
         ];
-        $data["website"]=$this->getDataWebsite();
+        $data["website"] = $this->getDataWebsite();
         return view("components.master.template.metode_template", compact("data"));
     }
 
@@ -110,7 +111,7 @@ class Page extends Controller
         if (!file_exists($path)) {
             abort("404", "Path not found");
         }
-        
+
         return response()->file($path);
     }
     public function home()
@@ -155,7 +156,7 @@ class Page extends Controller
         $data["user"] = (object) [
             "name" => Auth::user()->name
         ];
-        $data["website"]=$this->getDataWebsite();
+        $data["website"] = $this->getDataWebsite();
         return view("components.master.template.transaksi_pembayaran", compact("data"));
     }
 
@@ -165,7 +166,7 @@ class Page extends Controller
         $data["user"] = (object) [
             "name" => Auth::user()->name
         ];
-        $data["website"]=$this->getDataWebsite();
+        $data["website"] = $this->getDataWebsite();
         return view("components.master.template.akun_template", compact("data"));
     }
     public function admin_website()
@@ -185,8 +186,50 @@ class Page extends Controller
         $data["user"] = (object) [
             "name" => Auth::user()->name
         ];
-        $data["website"]=$this->getDataWebsite();
+        $data["website"] = $this->getDataWebsite();
         return view("components.master.template.stok-keluar-template", compact("data"));
+    }
+    public function admin_laporan(string $ayam, string $startdate, string $enddate, int $jenis_stok)
+    {
+        $data["title"] = "Laporan Stok Masuk";
+        $data["user"] = (object) [
+            "name" => Auth::user()->name
+        ];
+        $website = WebsiteModel::get()->first();
+        $website->urllogo = $path = url("website/logo/" . $website->logo);
+        $website->urlimage = $path = url("website/image/" . $website->image);
+        $data["website"] = $website;
+        $laporan = $this->cetakLaporan($ayam, $startdate, $enddate, $jenis_stok);
+        $data["laporan"] = $laporan;
+        $startdate = Carbon::parse($startdate);
+        $enddate = Carbon::parse($enddate);
+
+        if ($startdate->format('m') === $enddate->format('m')) {
+            // Jika bulan sama, tampilkan tanggal awal dan akhir dengan format bulan yang sama
+            $periode = $startdate->format('j') . ' - ' . $enddate->format('j F Y');
+        } else {
+            // Jika bulan berbeda, tampilkan bulan yang berbeda
+            $periode = $startdate->format('j F') . ' - ' . $enddate->format('j F Y');
+        }
+
+        $data["periode"] = $periode;
+        return view("components.master.template.laporan_stok", compact("data"));
+    }
+    private function cetakLaporan(string $ayam, string $startdate, string $enddate, $jenis_stok): array
+    {
+        $totalstok = 0;
+        $query = DB::table('stok_ayam')
+            ->join('jenis_ayam', 'stok_ayam.jenis_ayam', '=', 'jenis_ayam.id')
+            ->select('stok_ayam.*', 'jenis_ayam.jenis')
+            ->where("jenis_stok", $jenis_stok)
+            ->whereBetween('stok_ayam.tanggal_masuk', [$startdate, $enddate]);
+        if ($ayam !== 'all') {
+            $query->where("jenis_ayam", $ayam);
+        }
+        $data = $query->get()->all();
+
+        return $data;
+
     }
 
 }

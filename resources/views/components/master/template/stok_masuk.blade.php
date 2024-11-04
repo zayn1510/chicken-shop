@@ -8,12 +8,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <p class="poppins font-13 bold">Data {{ $data["title"] }}</p>
+                    <p class="poppins font-13 bold">Data {{ $data['title'] }}</p>
                 </div>
                 <div class="col-sm-6 poppins font-13">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Data {{ $data["title"] }}</li>
+                        <li class="breadcrumb-item active">Data {{ $data['title'] }}</li>
                     </ol>
                 </div>
             </div>
@@ -32,19 +32,33 @@
                         <!-- /.card -->
 
                         <div class="card">
-                            <x-master.toast/>
+                            <x-master.toast />
                             <div class="card-header">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <h5 class="font-13 bold">Data {{ $data["title"] }}</h5>
+                                <div class="row form-report">
+                                    <div class="col-md-3 pull-right">
+                                        <div class="form-group">
+                                            <select class="form-control font-12" name="jenis" id="jenis"
+                                                data-action="search-jenis">
+                                                <option value="">Semua</option>
+                                            </select>
+                                        </div>
                                     </div>
-
-                                    <div class="col-md-2 pull-right">
-                                            <div class="form-group">
-                                                <select class="form-control font-12" name="jenis" id="jenis" data-action="search-jenis">
-                                                    <option value="">Semua</option>
-                                                </select>
-                                            </div>
+                                    <div class="col-md-3 pull-right">
+                                        <div class="form-group">
+                                            <input type='date' class="form-control" id="startdate"
+                                                name="startdate" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 pull-right">
+                                        <div class="form-group">
+                                            <input type='date' class="form-control" id="enddate"
+                                                name="enddate" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 pull-right">
+                                        <div class="form-group">
+                                           <button class="btn btn-primary" data-action='cetak-laporan'>Cetak Laporan</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -56,7 +70,7 @@
                                         <x-master.table.stok_masuk />
                                     </div>
                                 </div>
-                               
+
                             </div>
                             <!-- /.card-body -->
                         </div>
