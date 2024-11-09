@@ -16,7 +16,7 @@ app.controller("homeController", ($scope, $http) => {
     const startdate = document.getElementById('startdate');
     const enddate = document.getElementById('enddate');
     const getDataStokMasuk = () => {
-        new StokService($http).getDataStokBy(pageSize, PageNumber, 0, 1, res => {
+        new StokService($http).getDataStokBy(pageSize, PageNumber, 0, 2, res => {
             const { data, totalPages } = res;
             totalPagesTemp = totalPages;
             initData(data, totalPages);
@@ -65,7 +65,7 @@ app.controller("homeController", ($scope, $http) => {
         } else if (dataaction === 'search-jenis') {
             const value = evt.target.value;
             if (value.length > 0) {
-                new StokService($http).getDataStokBy(pageSize, PageNumber, value, 1, res => {
+                new StokService($http).getDataStokBy(pageSize, PageNumber, value, 2, res => {
                     const { data, totalPages } = res;
                     initData(data, totalPages);
                 });
