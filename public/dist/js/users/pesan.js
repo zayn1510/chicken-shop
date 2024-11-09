@@ -90,15 +90,16 @@ app.controller("homeController", ($scope, $http) => {
             }
         });
         let bank = document.getElementById("bankList");
-        if (bank.value.length === 0) {
-            bank = 0;
+        let newbank = 0;
+        if (bank.value.length !== 0) {
+            newbank = bank.value;
         }
         const order = {
             user_id: parseInt(userid),
             total: total,
             status: 1,
             detail_orders: products,
-            bank: bank,
+            bank: newbank,
             metode: parseInt(document.getElementById("paymentMethod").value)
         };
 
