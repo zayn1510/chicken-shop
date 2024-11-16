@@ -26,7 +26,8 @@ class JenisAyamRequest extends FormRequest
             "jenis" => "string|required",
             "keterangan" => "string|required",
             "berat" => "required",
-            "harga" => "required"
+            "harga" => "required",
+            "diskon" => "required"
         ];
     }
 

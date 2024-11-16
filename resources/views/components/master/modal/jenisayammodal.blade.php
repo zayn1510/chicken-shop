@@ -24,6 +24,10 @@
                     <label class="font-12">Harga</label>
                     <input type="text" class="form-control font-12 jenis" data-action="price-action" id="harga" />
                 </div>
+                <div class="form-group poppins">
+                    <label class="font-12">Diskon</label>
+                    <input type="text" class="form-control font-12 jenis" data-action="price-action" id="diskon" />     
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

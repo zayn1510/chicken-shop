@@ -46,33 +46,86 @@
         }
 
         .product-card {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            position: relative;
             width: 300px;
-            text-align: center;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             padding: 20px;
-            transition: transform 0.3s;
+            text-align: center;
         }
 
-        .product-card img {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-    
-            border-radius: 10px;
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .product-info {
+            padding-top: 10px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: bold;
             margin-bottom: 10px;
         }
 
-        .product-card h3 {
-            margin: 15px 0;
-            color: #d32f2f;
+        .product-description {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 15px;
         }
 
-        .product-card p {
-            color: #666;
-            font-size: 0.9em;
+        .price-info {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            padding: 10px;
+        }
+
+        .old-price {
+            color: #999;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .garis {
+            text-decoration: line-through;
+        }
+
+        .new-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .add-to-cart {
+            padding: 10px 20px;
+            background-color: #1f1197;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .add-to-cart:hover {
+            background-color: #2980b9;
         }
 
         .product-actions {
@@ -184,8 +237,9 @@
             margin-top: 20px;
             text-align: center;
         }
-        .hide{
-            display:none;
+
+        .hide {
+            display: none;
         }
     </style>
 </head>
@@ -199,7 +253,7 @@
     <section class="order-section">
         <h2>Pesan Produk</h2>
         <div class="product-list">
-         
+
         </div>
 
         <div class="payment-methods">
@@ -212,7 +266,7 @@
             <div class="bank-dropdown hide" id="bankDropdown">
                 <label for="bankList">Pilih Bank:</label>
                 <select id="bankList">
-                   
+
                 </select>
             </div>
         </div>
@@ -220,22 +274,22 @@
         <button class="btn-order" id="pesan-sekarang">Pesan Sekarang</button>
 
         <div class="back-link">
-            <a href="{{url("/")}}">Kembali ke Beranda</a>
+            <a href="{{ url('/') }}">Kembali ke Beranda</a>
         </div>
     </section>
 
-        <script>
-            var API = "{{ env('API_URL') }}";
-            var API_SERVICE = "{{ env('API_SERVICE') }}";
-        
-            var accessToken = "{{ session('token') }} ";
-        </script>
-        <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('dist/js/angular.min.js') }}"></script>
-        <script src="{{ asset('dist/js/angular-route.min.js') }}"></script>
-        <script src="{{ asset('dist/js/sweetalert.min.js') }}"></script>
-        <script src="{{ asset('dist/js/angular-datatables.min.js') }}"></script>
-        <script type="module" src="{{ asset('dist/js/users/pesan.js') }}"></script>
+    <script>
+        var API = "{{ env('API_URL') }}";
+        var API_SERVICE = "{{ env('API_SERVICE') }}";
+
+        var accessToken = "{{ session('token') }} ";
+    </script>
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('dist/js/angular.min.js') }}"></script>
+    <script src="{{ asset('dist/js/angular-route.min.js') }}"></script>
+    <script src="{{ asset('dist/js/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('dist/js/angular-datatables.min.js') }}"></script>
+    <script type="module" src="{{ asset('dist/js/users/pesan.js') }}"></script>
 
 </body>
 
