@@ -87,6 +87,7 @@ app.controller("homeController", ($scope, $http) => {
         priceInfo.appendChild(oldPrice);
         if (diskon > 0) {
             oldPrice.classList.add("garis");
+            productCard.appendChild(discountBadge);
             priceInfo.appendChild(newPrice);
         }
 
@@ -95,7 +96,7 @@ app.controller("homeController", ($scope, $http) => {
         productInfo.appendChild(priceInfo);
         productInfo.appendChild(addToCartButton);
 
-        productCard.appendChild(discountBadge);
+       
         productCard.appendChild(productImage);
         productCard.appendChild(productInfo);
 
