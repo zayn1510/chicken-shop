@@ -24,44 +24,80 @@ app.controller("homeController", ($scope, $http) => {
     // });
 
 
-    const createProductCard = (url, caption, harga, id, desc) => {
-        const productCard = document.createElement("div");
-        productCard.className = "product-card";
+    const createProductCard = (url, caption, harga, id, desc, diskon) => {
 
-        const imageContainer = document.createElement("div");
-        imageContainer.className = "product-card__image";
-        const img = document.createElement("img");
-        img.src = window.location.href + "produk/" + id + "/" + url;
-        img.alt = caption;
-        imageContainer.appendChild(img);
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card');
 
-        const infoContainer = document.createElement("div");
-        infoContainer.className = "product-card__info";
-        const title = document.createElement("h2");
-        title.className = "product-card__title";
-        title.textContent = caption;
-        const description = document.createElement("p");
-        description.className = "product-card__description";
 
-        description.textContent = desc;
+        const discountBadge = document.createElement('div');
+        const discount = diskon * 100;
+        discountBadge.classList.add('discount-badge');
+        discountBadge.textContent = "Diskon " + discount + "%";
 
-        const priceRow = document.createElement("div");
-        priceRow.className = "product-card__price-row";
-        const price = document.createElement("span");
+
+        const productImage = document.createElement('img');
+        productImage.src = window.location.href + "produk/" + id + "/" + url;
+        productImage.alt = caption;
+        productImage.classList.add('product-image');
+
+
+        const productInfo = document.createElement('div');
+        productInfo.classList.add('product-info');
+
+
+        const productTitle = document.createElement('h4');
+        productTitle.classList.add('product-title');
+        productTitle.textContent = caption;
+
+
+        const productDescription = document.createElement('p');
+        productDescription.classList.add('product-description');
+        productDescription.textContent = desc;
+
+
+        const priceInfo = document.createElement('div');
+        priceInfo.classList.add('price-info');
+
+
+        const hargadiskon = harga-((diskon) * harga);
 
         const formattedPrice = new Intl.NumberFormat('id-ID', {
             style: 'currency',
             currency: 'IDR'
         }).format(harga);
-        price.className = "product-card__price";
-        price.textContent = formattedPrice;
+        const oldPrice = document.createElement('span');
+        oldPrice.classList.add('old-price');
+        oldPrice.textContent = formattedPrice;
 
-        priceRow.appendChild(price);
-        infoContainer.appendChild(title);
-        infoContainer.appendChild(description);
-        infoContainer.appendChild(priceRow);
-        productCard.appendChild(imageContainer);
-        productCard.appendChild(infoContainer);
+        const formattedDiskon = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+        }).format(hargadiskon);
+        const newPrice = document.createElement('span');
+        newPrice.classList.add('new-price');
+        newPrice.textContent = formattedDiskon;
+
+        const addToCartButton = document.createElement('button');
+        addToCartButton.classList.add('add-to-cart');
+        addToCartButton.textContent = 'Pesan Sekarang';
+        addToCartButton.setAttribute("data-action", "pesan");
+
+
+        priceInfo.appendChild(oldPrice);
+        if (diskon > 0) {
+            oldPrice.classList.add("garis");
+            priceInfo.appendChild(newPrice);
+        }
+
+        productInfo.appendChild(productTitle);
+        productInfo.appendChild(productDescription);
+        productInfo.appendChild(priceInfo);
+        productInfo.appendChild(addToCartButton);
+
+        productCard.appendChild(discountBadge);
+        productCard.appendChild(productImage);
+        productCard.appendChild(productInfo);
 
         return productCard;
     }
@@ -70,6 +106,13 @@ app.controller("homeController", ($scope, $http) => {
         const data_action = evt.target.getAttribute("data-action");
         if (data_action === 'search-order') {
 
+        }
+    });
+
+    document.addEventListener("click", evt => {
+        const data_action = evt.target.getAttribute("data-action");
+        if (data_action === 'pesan') {
+            window.location.href = "pesan";
         }
     });
     // Panggil fungsi untuk menambahkan elemen produk ke halaman
@@ -84,9 +127,8 @@ app.controller("homeController", ($scope, $http) => {
                 if (str.length > 50) {
                     str = str.substring(0, 50) + '...';
                 }
-                console.info(str);
                 const productCard = createProductCard(data[index].produk_media[0].media_url, data[index].jenis, data[index].harga,
-                    data[index].id, str);
+                    data[index].id, str, data[index].diskon);
                 elementProduk.append(productCard);
             }
         });

@@ -70,13 +70,17 @@ app.controller("homeController", ($scope, $http) => {
 
 
         let total = 0;
+
+
         productCards.forEach(card => {
 
             const quantityInput = card.querySelector('input[type="number"]');
-            const priceElement = card.querySelector('p[data-price]');
+            const priceElement = card.getAttribute("data-price");
+          
             const quantity = parseInt(quantityInput.value);
-            const price = parseFloat(priceElement.getAttribute('data-price'));
-            const temptotal = price * quantity;
+            const price = parseFloat(priceElement);
+            const temptotal = quantity * price;
+          
 
             if (quantity > 0) {
                 const product = {
@@ -102,7 +106,6 @@ app.controller("homeController", ($scope, $http) => {
             bank: newbank,
             metode: parseInt(document.getElementById("paymentMethod").value)
         };
-
         return order;
     }
 
@@ -155,35 +158,70 @@ app.controller("homeController", ($scope, $http) => {
 
 
 
-    const createProductCard = (url, caption, harga, id, stok) => {
-        var productCard = document.createElement('div');
-        productCard.className = 'product-card';
+    const createProductCard = (url, caption, harga, id, stok, diskon) => {
+        const productCard = document.createElement('div');
+        productCard.classList.add('product-card');
 
-        const urlbase = window.location.origin + "/produk/" + id + "/" + url;
+        const discountBadge = document.createElement('div');
+        const discount = diskon * 100;
+        discountBadge.classList.add('discount-badge');
+        discountBadge.textContent = "Diskon " + discount + "%";
 
-        const img = document.createElement('img');
-        img.src = urlbase;
-        img.alt = caption
 
-        const title = document.createElement('h4');
-        title.textContent = caption
+        const productImage = document.createElement('img');
+        productImage.src = window.location.origin + "/produk/" + id + "/" + url;
+        productImage.alt = caption;
+        productImage.classList.add('product-image');
 
-        // Membuat elemen p untuk harga
-        const price = document.createElement('p');
-        price.setAttribute("data-price", harga);
-        price.setAttribute("data-stok", stok);
-        price.textContent = lib.formatRupiah(harga);
+
+        const productInfo = document.createElement('div');
+        productInfo.classList.add('product-info');
+
+
+        const productTitle = document.createElement('h3');
+        productTitle.classList.add('product-title');
+        productTitle.textContent = caption;
+        const priceInfo = document.createElement('div');
+        priceInfo.classList.add('price-info');
+
+
+        const hargadiskon = harga - ((diskon) * harga);
+        productCard.setAttribute("data-price",hargadiskon);
+        const formattedPrice = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+        }).format(harga);
+        const oldPrice = document.createElement('span');
+        oldPrice.classList.add('old-price');
+        oldPrice.textContent = formattedPrice;
+
+        const formattedDiskon = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+        }).format(hargadiskon);
+        const newPrice = document.createElement('span');
+        newPrice.classList.add('new-price');
+        newPrice.textContent = formattedDiskon;
+
 
         const stock = document.createElement('p');
         stock.setAttribute("data-stok", stok);
         stock.textContent = "Stok tersedia " + stok;
         stock.className = "poppins";
 
-        // Menambahkan img, h4, dan p ke dalam div utama
-        productCard.appendChild(img);
-        productCard.appendChild(title);
-        productCard.appendChild(price);
-        productCard.appendChild(stock);
+        priceInfo.appendChild(oldPrice);
+        if (diskon > 0) {
+            oldPrice.classList.add("garis");
+            priceInfo.appendChild(newPrice);
+        }
+
+        productInfo.appendChild(productTitle);
+        productInfo.appendChild(priceInfo);
+        productInfo.appendChild(stock);
+
+        productCard.appendChild(discountBadge);
+        productCard.appendChild(productImage);
+        productCard.appendChild(productInfo);
         const elementActions = createProductActions("ayam", id, stok);
         productCard.appendChild(elementActions);
         return productCard;
@@ -195,7 +233,7 @@ app.controller("homeController", ($scope, $http) => {
             const elementProduk = document.querySelector(".product-list");
             for (var index = 0; index < data.length; index++) {
                 const productCard = createProductCard(data[index].produk_media[0].media_url, data[index].jenis,
-                    data[index].harga, data[index].id, data[index].stok);
+                    data[index].harga, data[index].id, data[index].stok, data[index].diskon);
                 elementProduk.append(productCard);
             }
         });

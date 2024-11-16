@@ -60,7 +60,7 @@ app.controller("homeController", ($scope, $http) => {
                     document.getElementById('imagePreview').style.display = 'block';
                     document.getElementById('uploadedImage').src = e.target.result;
                 };
-                reader.readAsDataURL(file);  // Read file as Data URL
+                reader.readAsDataURL(file);
             }
         } else if (dataaction === 'search-jenis') {
             const value = evt.target.value;

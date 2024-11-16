@@ -73,7 +73,7 @@ app.controller("homeController", ($scope, $http) => {
                     document.getElementById('imagePreview').style.display = 'block';
                     document.getElementById('uploadedImage').src = e.target.result;
                 };
-                reader.readAsDataURL(file);  // Read file as Data URL
+                reader.readAsDataURL(file);
             }
         }
     });
@@ -175,7 +175,7 @@ app.controller("homeController", ($scope, $http) => {
         } else if (dataaction === 'hapus-stok') {
             deleteStok(dataid);
         }
-       
+
     });
 
     const clearFormStok = () => {
@@ -386,7 +386,8 @@ app.controller("homeController", ($scope, $http) => {
                 keys.forEach((key, index) => {
                     jenisData[index].value = json[key];
                 });
-
+                let diskon = json.diskon * 100 + "%";
+                jenisData[4].value = diskon;
             }
         });
     }
@@ -410,6 +411,13 @@ app.controller("homeController", ($scope, $http) => {
         return result;
     }
 
+    const checkDiskon = (diskon) => {
+        if (diskon == 0) {
+            return "tidak ada diskon";
+        }
+        return diskon * 100 + "%";
+    }
+
     const setSkeltonRow = (data) => {
         const tbody = document.querySelector("tbody");
         tbody.innerHTML = "";
@@ -431,6 +439,7 @@ app.controller("homeController", ($scope, $http) => {
               <td>${row.berat}</td>
               <td>${row.harga}</td>
               <td>${row.stok}</td>
+              <td>${checkDiskon(row.diskon)}</td>
               <td>
                         <button class="btn btn-success" data-action="foto-product" data-value=${row.id}>Foto Ayam</button>
                           <button class="btn btn-info" data-action="stok-product" data-value=${row.id}>Stok Ayam</button>
@@ -578,7 +587,10 @@ app.controller("homeController", ($scope, $http) => {
         });
         let formattedValue = price.value;
         let originalValue = formattedValue.replace(/[^,\d]/g, '').replace(',', '.');
+        let percentage = parseFloat(formdata.diskon.replace('%', ''));
+        let decimalValue = percentage / 100;
         formdata.harga = originalValue;
+        formdata.diskon = decimalValue;
         if (!validationForm(message)) {
             return;
         }
@@ -613,15 +625,19 @@ app.controller("homeController", ($scope, $http) => {
         });
         let formattedValue = price.value;
         let originalValue = formattedValue.replace(/[^,\d]/g, '').replace(',', '.');
+        let percentage = parseFloat(formdata.diskon.replace('%', ''));
+        let decimalValue = percentage / 100;
         formdata.harga = originalValue;
+        formdata.diskon = decimalValue;
         new JenisService($http).updateDataJenis(formdata, id, res => {
             const { success } = res;
+            console.info(success);
             if (!success) {
                 OpenToast("Simpan data gagal", "danger");
                 return;
             }
             OpenToast("Simpan data berhasil", "success");
-            getDataJenis
+            getDataJenis();
         })
     }
 

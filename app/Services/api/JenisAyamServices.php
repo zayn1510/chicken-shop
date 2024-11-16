@@ -93,6 +93,7 @@ class JenisAyamServices
         $update->keterangan = $jenisAyamRequest->keterangan;
         $update->berat = $jenisAyamRequest->berat;
         $update->harga = $jenisAyamRequest->harga;
+        $update->diskon = $jenisAyamRequest->diskon;
         $update->save();
         return response()->json([
             "message" => "Success",

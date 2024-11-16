@@ -48,13 +48,14 @@
 
     <section id="promo">
         <h2>Promo Spesial Minggu Ini!</h2>
+        
         <p>Dapatkan potongan harga 20% untuk setiap pembelian 2 ekor ayam potong. Stok terbatas, jadi pesan sekarang!
         </p>
 
         <div class="promo-details">
             <h3>Produk Kami</h3>
             <div class="cont">
-                
+                 
             </div>
             
         </div>
